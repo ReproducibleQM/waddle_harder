@@ -20,10 +20,6 @@ penguin1all=lme(fixed=Volume~Location*Year*Month*Source, random=~1|Day, data=pen
 
 #we hooked up!
 
-shit code codetools::checkUsage(
-  
-  
-  
-  fhoief
+
   
 )
