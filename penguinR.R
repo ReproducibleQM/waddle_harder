@@ -3,23 +3,49 @@
 library("nlme")
 
 #loading the data
-penguin.data<-read.csv("C:/Users/Anthony Minerovic/Google Drive/Blackwood Lab/2018/penguins/penguin.csv")
+penguin.data<-read.csv("C:/Users/Anthony Minerovic/Google Drive/Blackwood Lab/2018/penguins/waddle_harder/penguin.csv")
 names(penguin.data)
 dim(penguin.data)
+View(penguin.data)
+summary(penguin.data)
+
+
+#subset by egg size
 
 penguin.a=penguin.data[penguin.data$A.or.B.egg=="A",]
 penguin.b=penguin.data[penguin.data$A.or.B.egg=="B",]
 penguin.u=penguin.data[penguin.data$A.or.B.egg=="U",]
 penguin.no.u=penguin.data[penguin.data$A.or.B.egg!="U",]
 
+#subset by climate zone
+penguin.north=penguin.data[penguin.data$Zone=="Other",]
+penguin.south=penguin.data[penguin.data$Zone=="Gough",]
 
-penguin1all=lme(fixed=Volume~Location*Year*Month*Source, random=~1|Day, data=penguin.data)
+#subset by location
+
+penguin.Nightingale=penguin.data[penguin.data$Location=="Nightingale",]
+penguin.Tristan=penguin.data[penguin.data$Location=="Tristan",]
+
+
+
+#Subset by years
+
+#cutting out all of the years with a singularity issue
+penguin.n1<-read.csv("C:/Users/Anthony Minerovic/Google Drive/Blackwood Lab/2018/penguins/waddle_harder/penguin.n1.csv")
 
 
 
 
-#we hooked up!
+#linear models
+
+#giving me trouble with there being only one location for some years. also doesn't like using Day as a random factor
+
+penguin.vol.location=lme(fixed=Volume~Location, random=~1|Length..mm., data=penguin.data)
+anova(penguin.vol.location)
+
+penguin.loc.yr=lme(fixed=Volume~Location*Year, random=~1|SpecimenID, data=penguin.n1)
 
 
-  
-)
+penguin2all=lm(Volume~Location*Year*Zone*Source, data=penguin.data)
+anova(penguin2all)
+

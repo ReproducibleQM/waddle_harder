@@ -21,12 +21,9 @@ NHMUK,1880.12.3.210-215 / 10,Inaccessible,Other,16,10,1873,U,62.5,49.2,76.7,NA
 NHMUK,1880.12.3.210-215 / 13,Inaccessible,Other,16,10,1873,U,63.8,47.6,73.3,NA
 NHMUK,1880.12.3.210-215 / 12,Inaccessible,Other,16,10,1873,U,64.6,49.5,80.3,NA
 NHMUK,1880.12.3.210-215 / 8,Inaccessible,Other,16,10,1873,U,64.8,50.6,84.1,NA
-NHMUK,1979.14.2,Tristan,Other,NA,NA,1919,U,64.3,50.2,82.2,NA
-NHMUK,1922.12.21.16,Tristan,Other,NA,NA,1921,U,69.4,55.3,107.6,NA
 NHMUK,1927.10.20 / 5,Inaccessible,Other,NA,NA,1922,U,57.1,45.7,60.5,NA
 NHMUK,1927.10.20 / 6,Inaccessible,Other,NA,NA,1922,U,57.3,46.7,63.4,NA
 NHMUK,1927.10.20 / 4,Inaccessible,Other,NA,NA,1922,U,73.1,55.6,114.6,NA
-NHMUK,1952.7.815,Nightingale,Other,NA,NA,1936,U,71.5,52.6,100.3,NA
 NHMUK,1953.4.2 / 67,Nightingale,Other,14,9,1950,U,48,35.8,31.2,NA
 NHMUK,1953.4.5 / 16,Nightingale,Other,20,9,1950,U,60.3,47.5,69,NA
 NHMUK,1953.4.5 / 14,Nightingale,Other,20,9,1950,U,71,55.8,112.1,NA
@@ -944,7 +941,6 @@ UCT-RSPB,Gough 181,Gough,Gough,20,10,2014,B,74.7,56.9,122.6,NA
 UCT-RSPB,Gough 173,Gough,Gough,20,10,2014,B,73.7,59.3,131.4,NA
 UCT-RSPB,Gough 115,Gough,Gough,20,10,2014,B,75.5,57.4,126.1,NA
 UCT-RSPB,Gough 114,Gough,Gough,20,10,2014,B,76.3,57.8,129.2,NA
-WFVZ,178203,Tristan,Other,NA,1,1888,U,66.7,53.3,95.9,measured by Ren? Corado
 Williams 1980,Williams 17,Gough,Gough,NA,NA,1979,A,56.1,50.8,73.4,Simulated from mean ? SD
 Williams 1980,Williams 7,Gough,Gough,NA,NA,1979,A,57.8,49.1,70.7,Simulated from mean ? SD
 Williams 1980,Williams 6,Gough,Gough,NA,NA,1979,A,59.3,49.6,73.9,Simulated from mean ? SD
