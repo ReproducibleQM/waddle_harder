@@ -1,0 +1,35 @@
+Link to Earth Engine Code File 
+
+Sea Surface Temperature and Chorophyll
+
+Aqua MODIS OCM2-HI 
+
+Temporal Resolution 2002-Present
+152 Images per location per year
+
+Link will only work for if you have an Earth Engine Account
+https://code.earthengine.google.com/38da632f413d35ac4898ff284736e841
+
+*************************************************************************
+Standard Citation:
+
+NASA Goddard Space Flight Center, Ocean Ecology Laboratory, Ocean Biology Processing Group. Moderate-resolution Imaging Spectroradiometer (MODIS) Aqua Ocean Color Data, NASA OB.DAAC, Greenbelt, MD, USA.
+
+DOI: 10.5067/AQUA/MODIS/L3M/<BANDNAME>/2014
+
+Accessed on (date)
+
+For the DOI, replace <BANDNAME> with the desired band (CHL, FLH, POC, RRS, SST)
+
+Sample
+
+Data availability (time)
+Jul 4, 2002 - Feb 15, 2018
+Provider
+NASA GSFC
+Tags
+nasa, modis, oceandata, temperature, weather, climate, ocean, biology, chlorophyll, reflectance
+ImageCollection ID
+NASA/OCEANDATA/MODIS-Aqua/L3SMI
+
+***************************************************************************
