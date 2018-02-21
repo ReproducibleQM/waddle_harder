@@ -43,6 +43,12 @@ penguin.n1<-read.csv("C:/Users/Anthony Minerovic/Google Drive/Blackwood Lab/2018
 #cutting out all of the years where there's only one island with specimens
 
 
+#cut out years before 2002
+penguin.new=penguin.data[penguin.data$Year>2001,]
+View(penguin.new)
+
+
+
 #linear models
 
 #giving me trouble with there being only one location for some years. also doesn't like using Day as a random factor
