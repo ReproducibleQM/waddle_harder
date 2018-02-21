@@ -1,3 +1,8 @@
+#rockhopper penguin data from Alex Bond
+
+#created new variables: Location2 =gough and alex islands are merged. changed the name alex to gough
+#                     : Zone =gough island separated from all other islands.
+
 
 #needed packages
 library("nlme")
@@ -25,15 +30,17 @@ penguin.south=penguin.data[penguin.data$Zone=="Gough",]
 
 penguin.Nightingale=penguin.data[penguin.data$Location=="Nightingale",]
 penguin.Tristan=penguin.data[penguin.data$Location=="Tristan",]
-
+#Gough and Alex
+penguin.Gough=penguin.data[penguin.data$Location2=="Gough",]
+penguin.Inaccessible=penguin.data[penguin.data$Location=="Inaccessible",]
 
 
 #Subset by years
 
-#cutting out all of the years with a singularity issue
+#cutting out all of the years with a single specimen
 penguin.n1<-read.csv("C:/Users/Anthony Minerovic/Google Drive/Blackwood Lab/2018/penguins/waddle_harder/penguin.n1.csv")
 
-
+#cutting out all of the years where there's only one island with specimens
 
 
 #linear models
