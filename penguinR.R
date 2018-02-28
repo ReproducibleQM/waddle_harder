@@ -14,6 +14,9 @@ dim(penguin.data)
 View(penguin.data)
 summary(penguin.data)
 
+#to get rid of na
+#penguin<-subset(penguin.data,!is.na(penguin.data$))
+
 
 #subset by egg size
 
@@ -56,9 +59,13 @@ View(penguin.new)
 penguin.vol.location=lme(fixed=Volume~Location, random=~1|Length..mm., data=penguin.data)
 anova(penguin.vol.location)
 
-penguin.loc.yr=lme(fixed=Volume~Location*Year, random=~1|SpecimenID, data=penguin.n1)
 
 
-penguin2all=lm(Volume~Location*Year*Zone*Source, data=penguin.data)
+penguin2all=lm(Volume~Location*Year*Zone, data=penguin.data)
 anova(penguin2all)
+
+
+
+
+
 
