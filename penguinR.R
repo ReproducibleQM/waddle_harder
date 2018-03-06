@@ -8,7 +8,7 @@
 library("nlme")
 
 #loading the data
-penguin.data<-read.csv("C:/Users/Anthony Minerovic/Google Drive/Blackwood Lab/2018/penguins/waddle_harder/penguin.csv")
+penguin.data<-read.csv("penguin.csv")
 names(penguin.data)
 dim(penguin.data)
 View(penguin.data)
@@ -115,3 +115,7 @@ anova(Nightingalenewlm)
 
 Inaccessiblenewlm=lm(Volume~Year, data=penguin.Inaccessible.new)
 anova(Inaccessiblenewlm)
+
+
+# PLot Year and Length
+plot(penguin.data$Length..mm.~penguin.data$Year)
