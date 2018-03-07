@@ -122,11 +122,20 @@ plot(penguin.data$Length..mm.~penguin.data$Year)
 
 
 #Matts Experimental plots
-penguinPlot <- ggplot(penguin.data, aes(Year, Volume)) + 
+penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = AorB)) + 
   geom_point(aes(fill = AorB), pch = 21) +
     scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', col = 'firebrick', size = 2)
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
 
 
 #Call Plot
 penguinPlot
+
+
+#Regression, Find the Slope
+linearModel <- lm(Volume~AorB*Year, data = penguin.data)
+
+linearModel
+
+summary(linearModel)
