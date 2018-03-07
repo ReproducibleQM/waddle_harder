@@ -156,3 +156,59 @@ linearModel
 
 summary(linearModel)
 
+#Same plot as above, but for each hisland separately
+
+#tristan
+penguinPlot.Tristan <- ggplot(penguin.Tristan, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Tristan
+#Regression
+Tristan.linearModel <- lm(Volume~AorB*Year, data = penguin.Tristan)
+Tristan.linearModel
+summary(Tristan.linearModel)
+
+#Gough
+penguinPlot.Gough <- ggplot(penguin.Gough, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Gough
+#Regression
+Gough.linearModel <- lm(Volume~AorB*Year, data = penguin.Gough)
+Gough.linearModel
+summary(Gough.linearModel)
+
+#Inaccessible     inaccessible island only has U eggs
+penguinPlot.Inaccessible <- ggplot(penguin.Inaccessible, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Inaccessible
+#Regression
+Inaccessible.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
+Inaccessible.linearModel
+summary(Inaccessible.linearModel)
+#inaccessible island only has U eggs
+
+
+#nightingale   nightingale island only differentiated between a and b eggs in 2014
+penguinPlot.Nightingale <- ggplot(penguin.Nightingale, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Nightingale
+#Regression
+Nightingale.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
+Nightingale.linearModel
+summary(Nightingale.linearModel)
+#nightingale island only differentiated between a and b eggs in 2014
