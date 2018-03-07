@@ -126,11 +126,23 @@ Inaccessiblenewlm=lm(Volume~Year, data=penguin.Inaccessible.new)
 anova(Inaccessiblenewlm)
 
 
-# PLot Year and Length
+# Plot Year and Length
 plot(penguin.data$Length..mm.~penguin.data$Year)
 
 
+<<<<<<< HEAD
 qplot(Year,Volume, data=penguin.a)
 qplot(Year,Volume, data=penguin.b)
 qplot(Year,Volume, data=penguin.u)
 qplot(Year,Volume, data=penguin.Tristan)
+=======
+#Matts Experimental plots
+penguinPlot <- ggplot(penguin.data, aes(Year, Volume)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+    scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', col = 'firebrick', size = 2)
+
+
+#Call Plot
+penguinPlot
+>>>>>>> b01ab6f6defac6b3a120d47f7c4cfd226db8d084
