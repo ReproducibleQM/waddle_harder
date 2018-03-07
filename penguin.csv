@@ -1,4 +1,4 @@
-Source,SpecimenID,Location,Location2,Zone,Day,Month,Year,A or B egg,Length (mm),Breadth (mm),Volume,Reference
+Source,SpecimenID,Location,Location2,Zone,Day,Month,Year,AorB,Length,Breadth,Volume,Reference
 Ditsong,unknown,Nightingale,Nightingale,Other,NA,9,1945,U,31,26.5,11,Roberts 1948
 Ditsong,unknown,Nightingale,Nightingale,Other,NA,9,1945,U,39,32,20.2,Roberts 1948
 Ditsong,unknown,Nightingale,Nightingale,Other,NA,9,1945,U,40,36,26.3,Roberts 1948
