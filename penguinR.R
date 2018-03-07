@@ -6,6 +6,7 @@
 
 #needed packages
 library("nlme")
+library("ggplot2")
 
 #loading the data
 penguin.data<-read.csv("penguin.csv")
@@ -30,11 +31,19 @@ penguin.north=penguin.data[penguin.data$Zone=="Other",]
 penguin.south=penguin.data[penguin.data$Zone=="Gough",]
 
 #subset by location
-#Nightingale and Gough grouped together
+#Nightingale and Alex grouped together
 penguin.Nightingale=penguin.data[penguin.data$Location=="Nightingale",]
 penguin.Tristan=penguin.data[penguin.data$Location=="Tristan",]
 penguin.Gough=penguin.data[penguin.data$Location2=="Gough",]
 penguin.Inaccessible=penguin.data[penguin.data$Location=="Inaccessible",]
+
+
+#subset a or b egg for each island
+penguin.Nightingale.a=penguin.data[penguin.a$Location=="Nightingale",]
+penguin.Tristan.a=penguin.data[penguin.a$Location=="Tristan",]
+penguin.Gough.a=penguin.data[penguin.a$Location2=="Gough",]
+penguin.Inaccessible.a=penguin.data[penguin.a$Location=="Inaccessible",]
+
 
 
 #Subset by years
@@ -119,3 +128,9 @@ anova(Inaccessiblenewlm)
 
 # PLot Year and Length
 plot(penguin.data$Length..mm.~penguin.data$Year)
+
+
+qplot(Year,Volume, data=penguin.a)
+qplot(Year,Volume, data=penguin.b)
+qplot(Year,Volume, data=penguin.u)
+qplot(Year,Volume, data=penguin.Tristan)
