@@ -126,35 +126,11 @@ Inaccessiblenewlm=lm(Volume~Year, data=penguin.Inaccessible.new)
 anova(Inaccessiblenewlm)
 
 
-# Plot Year and Length
+# PLot Year and Length
 plot(penguin.data$Length..mm.~penguin.data$Year)
 
 
-<<<<<<< HEAD
 qplot(Year,Volume, data=penguin.a)
 qplot(Year,Volume, data=penguin.b)
 qplot(Year,Volume, data=penguin.u)
 qplot(Year,Volume, data=penguin.Tristan)
-=======
-#Matts Experimental plots
-penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
-    scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-
-
-#Call Plot
-penguinPlot
-<<<<<<< HEAD
-
-
-#Regression, Find the Slope
-linearModel <- lm(Volume~AorB*Year, data = penguin.data)
-
-linearModel
-
-summary(linearModel)
-=======
->>>>>>> b01ab6f6defac6b3a120d47f7c4cfd226db8d084
->>>>>>> db48b3944314adb8a22d7e5ab091e62c79e57761
