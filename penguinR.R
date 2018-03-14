@@ -49,8 +49,7 @@ penguin.Inaccessible.a=penguin.data[penguin.a$Location=="Inaccessible",]
 #Subset by years
 
 #cutting out all of the years with a single specimen
-penguin.n1<-read.csv("C:/Users/Anthony Minerovic/Google Drive/Blackwood Lab/2018/penguins/waddle_harder/penguin.n1.csv")
-
+penguin.n1<-read.csv("penguin.n1.csv")
 #cutting out all of the years where there's only one island with specimens
 
 
@@ -212,3 +211,10 @@ Nightingale.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
 Nightingale.linearModel
 summary(Nightingale.linearModel)
 #nightingale island only differentiated between a and b eggs in 2014
+
+# Discrimant Function from Bond et al. 2016
+# D = 0.73 * Length + 0.5 * Breadth - 72.39
+# Pr(A) = 1 / (1+e^(-D))
+penguin.new$discriminant <- 0.73 * penguin.new$Length+ 0.5 * penguin.new$Breadth - 72.39
+penguin.new$ProbabilityA <- 1 / (1 + exp(-penguin.new$discriminant))
+penguin.new$Decision <- ifelse(penguin.new$ProbabilityA >= 0.66, "A", ifelse(penguin.new$ProbabilityA <= 0.33, "B", "U"))
