@@ -1,6 +1,10 @@
 # waddle_harder
 
 # Project Abstract
+Changes in Egg Sizes among Rockhopper Penguins on the Tristan da Cunha Archipelago
+
+
+Over the past 50 years, the population of Rockhopper Penguins on the Tristan da Cunha archipelago has declined by 90%, leading to potentially adverse impacts on the surrounding environment. Penguins’ egg sizes are indicative of the amount of nutrients that they’re able to gather throughout the year, hence changes in egg sizes may reflect the overall health of penguin populations. The factors affecting the Tristan da Cunha penguin population have not been thoroughly explored, therefore, this study focuses on the temporal changes in egg sizes with respect to first or second laid egg (A or B) and the island on which they were laid. Furthermore, we conduct a climatological analysis to better understand the impacts of sea surface temperature and chlorophyll on penguin egg size and to construct a framework for future analysis. 
 
 
 #License
