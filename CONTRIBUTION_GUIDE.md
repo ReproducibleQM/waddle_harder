@@ -1,5 +1,4 @@
-
-+1tada First off, thanks for taking the time to contribute! tada+1
+## thanks for contributing!
 
 this is a set of guidelines for contributors to this project.
 
