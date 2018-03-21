@@ -34,9 +34,6 @@ penguin.b=penguin.data[penguin.data$A.or.B.egg=="B",]
 penguin.u=penguin.data[penguin.data$A.or.B.egg=="U",]
 penguin.no.u=penguin.data[penguin.data$A.or.B.egg!="U",]
 
-#subset by climate zone
-penguin.north=penguin.data[penguin.data$Zone=="Other",]
-penguin.south=penguin.data[penguin.data$Zone=="Gough",]
 
 #subset by location
 #Nightingale and Alex grouped together
@@ -53,6 +50,10 @@ penguin.Gough.a=penguin.data[penguin.a$Location2=="Gough",]
 penguin.Inaccessible.a=penguin.data[penguin.a$Location=="Inaccessible",]
 
 
+
+#subset by climate zone
+penguin.north=penguin.new[penguin.new$Zone=="Other",]
+penguin.south=penguin.new[penguin.new$Zone=="Gough",]
 
 #Subset by years
 
@@ -225,9 +226,9 @@ summary(Nightingale.linearModel)
 # Discriminant Function from Bond et al. 2016
 # D = 0.73 * Length + 0.5 * Breadth - 72.39
 # Pr(A) = 1 / (1+e^(-D))
-penguin.new$discriminant <- 0.73 * penguin.new$Length+ 0.5 * penguin.new$Breadth - 72.39
-penguin.new$ProbabilityA <- 1 / (1 + exp(-penguin.new$discriminant))
-penguin.new$Decision <- ifelse(penguin.new$ProbabilityA >= 0.66, "A", ifelse(penguin.new$ProbabilityA <= 0.33, "B", "U"))
+penguin.data$discriminant <- 0.73 * penguin.data$Length+ 0.5 * penguin.data$Breadth - 72.39
+penguin.data$ProbabilityA <- 1 / (1 + exp(-penguin.data$discriminant))
+penguin.data$Decision <- ifelse(penguin.data$ProbabilityA >= 0.66, "A", ifelse(penguin.data$ProbabilityA <= 0.33, "B", "U"))
 
 
 
@@ -309,3 +310,23 @@ Nightingale.linearModel2
 summary(Nightingale.linearModel2)
 #nightingale island only differentiated between a and b eggs in 2014
 
+
+#by climate zone
+penguinPlotnorth <- ggplot(penguin.north, aes(Year, Volume, color = Decision)) + 
+  geom_point(aes(fill = Decision), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+
+
+#Call Plot
+penguinPlotnorth
+
+
+
+#Regression, Find the Slope
+linearModelnorth <- lm(Volume~Decision*Year, data = penguin.north)
+
+linearModelnorth
+
+summary(linearModelnorth)
