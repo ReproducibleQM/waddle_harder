@@ -52,8 +52,8 @@ penguin.Inaccessible.a=penguin.data[penguin.a$Location=="Inaccessible",]
 
 
 #subset by climate zone
-penguin.north=penguin.new[penguin.new$Zone=="Other",]
-penguin.south=penguin.new[penguin.new$Zone=="Gough",]
+penguin.north=penguin.data[penguin.data$Zone=="Other",]
+penguin.south=penguin.data[penguin.data$Zone=="Gough",]
 
 #Subset by years
 
@@ -234,7 +234,7 @@ penguin.data$Decision <- ifelse(penguin.data$ProbabilityA >= 0.66, "A", ifelse(p
 
 #Remake plots with Discriminant function data
 #Matts Experimental plots
-penguinPlot2 <- ggplot(penguin.new, aes(Year, Volume, color = Decision)) + 
+penguinPlot2 <- ggplot(penguin.data, aes(Year, Volume, color = Decision)) + 
   geom_point(aes(fill = Decision), pch = 21) +
   scale_fill_manual(values = c('red', 'green', 'blue')) +
   geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
