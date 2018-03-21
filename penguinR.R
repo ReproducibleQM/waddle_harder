@@ -330,3 +330,6 @@ linearModelnorth <- lm(Volume~Decision*Year, data = penguin.north)
 linearModelnorth
 
 summary(linearModelnorth)
+
+
+write.csv(penguin.data, "penguin.data.csv")
