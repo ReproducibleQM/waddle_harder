@@ -395,8 +395,10 @@ penguin.Zone.B.lm = aov(Volume~Zone, data=penguin.B)
 anova(penguin.Zone.B.lm)
 
 
+#goals
+#plot the A eggs and B eggs north and south separated on the same graph
+#plot correlation between SST and egg size
 
 
-#correlation between SST and egg size
 
 
