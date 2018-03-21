@@ -222,79 +222,79 @@ penguin.new$Decision <- ifelse(penguin.new$ProbabilityA >= 0.66, "A", ifelse(pen
 
 #Remake plots with Discriminant function data
 #Matts Experimental plots
-penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
+penguinPlot2 <- ggplot(penguin.new, aes(Year, Volume, color = Decision)) + 
+  geom_point(aes(fill = Decision), pch = 21) +
   scale_fill_manual(values = c('red', 'green', 'blue')) +
   geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
   theme_bw()
 
 
 #Call Plot
-penguinPlot
+penguinPlot2
 
 
 
 #Regression, Find the Slope
-linearModel <- lm(Volume~AorB*Year, data = penguin.data)
+linearModel2 <- lm(Volume~Decision*Year, data = penguin.data)
 
-linearModel
+linearModel2
 
-summary(linearModel)
+summary(linearModel2)
 
 #Same plot as above, but for each hisland separately
 
 #tristan
-penguinPlot.Tristan <- ggplot(penguin.Tristan, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
+penguinPlot.Tristan2 <- ggplot(penguin.Tristan, aes(Year, Volume, color = Decision)) + 
+  geom_point(aes(fill = Decision), pch = 21) +
   scale_fill_manual(values = c('red', 'green', 'blue')) +
   geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
   theme_bw()
 #Call
-penguinPlot.Tristan
+penguinPlot.Tristan2
 #Regression
-Tristan.linearModel <- lm(Volume~AorB*Year, data = penguin.Tristan)
-Tristan.linearModel
-summary(Tristan.linearModel)
+Tristan.linearModel2 <- lm(Volume~Decision*Year, data = penguin.Tristan)
+Tristan.linearModel2
+summary(Tristan.linearModel2)
 
 #Gough
-penguinPlot.Gough <- ggplot(penguin.Gough, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
+penguinPlot.Gough2 <- ggplot(penguin.Gough, aes(Year, Volume, color = Decision)) + 
+  geom_point(aes(fill = Decision), pch = 21) +
   scale_fill_manual(values = c('red', 'green', 'blue')) +
   geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
   theme_bw()
 #Call
-penguinPlot.Gough
+penguinPlot.Gough2
 #Regression
-Gough.linearModel <- lm(Volume~AorB*Year, data = penguin.Gough)
-Gough.linearModel
-summary(Gough.linearModel)
+Gough.linearModel2 <- lm(Volume~Decision*Year, data = penguin.Gough)
+Gough.linearModel2
+summary(Gough.linearModel2)
 
 #Inaccessible     inaccessible island only has U eggs
-penguinPlot.Inaccessible <- ggplot(penguin.Inaccessible, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
+penguinPlot.Inaccessible2 <- ggplot(penguin.Inaccessible, aes(Year, Volume, color = Decision)) + 
+  geom_point(aes(fill = Decision), pch = 21) +
   scale_fill_manual(values = c('red', 'green', 'blue')) +
   geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
   theme_bw()
 #Call
-penguinPlot.Inaccessible
+penguinPlot.Inaccessible2
 #Regression
-Inaccessible.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
-Inaccessible.linearModel
-summary(Inaccessible.linearModel)
+Inaccessible.linearModel2 <- lm(Volume~Decision*Year, data = penguin.Inaccessible)
+Inaccessible.linearModel2
+summary(Inaccessible.linearModel2)
 #inaccessible island only has U eggs
 
 
 #nightingale   nightingale island only differentiated between a and b eggs in 2014
-penguinPlot.Nightingale <- ggplot(penguin.Nightingale, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
+penguinPlot.Nightingale2 <- ggplot(penguin.Nightingale, aes(Year, Volume, color = Decision)) + 
+  geom_point(aes(fill = Decision), pch = 21) +
   scale_fill_manual(values = c('red', 'green', 'blue')) +
   geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
   theme_bw()
 #Call
-penguinPlot.Nightingale
+penguinPlot.Nightingale2
 #Regression
-Nightingale.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
-Nightingale.linearModel
-summary(Nightingale.linearModel)
+Nightingale.linearModel2 <- lm(Volume~Decision*Year, data = penguin.Inaccessible)
+Nightingale.linearModel2
+summary(Nightingale.linearModel2)
 #nightingale island only differentiated between a and b eggs in 2014
 
