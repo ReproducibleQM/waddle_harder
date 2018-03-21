@@ -212,9 +212,89 @@ Nightingale.linearModel
 summary(Nightingale.linearModel)
 #nightingale island only differentiated between a and b eggs in 2014
 
-# Discrimant Function from Bond et al. 2016
+# Discriminant Function from Bond et al. 2016
 # D = 0.73 * Length + 0.5 * Breadth - 72.39
 # Pr(A) = 1 / (1+e^(-D))
 penguin.new$discriminant <- 0.73 * penguin.new$Length+ 0.5 * penguin.new$Breadth - 72.39
 penguin.new$ProbabilityA <- 1 / (1 + exp(-penguin.new$discriminant))
 penguin.new$Decision <- ifelse(penguin.new$ProbabilityA >= 0.66, "A", ifelse(penguin.new$ProbabilityA <= 0.33, "B", "U"))
+
+
+#Remake plots with Discriminant function data
+#Matts Experimental plots
+penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+
+
+#Call Plot
+penguinPlot
+
+
+
+#Regression, Find the Slope
+linearModel <- lm(Volume~AorB*Year, data = penguin.data)
+
+linearModel
+
+summary(linearModel)
+
+#Same plot as above, but for each hisland separately
+
+#tristan
+penguinPlot.Tristan <- ggplot(penguin.Tristan, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Tristan
+#Regression
+Tristan.linearModel <- lm(Volume~AorB*Year, data = penguin.Tristan)
+Tristan.linearModel
+summary(Tristan.linearModel)
+
+#Gough
+penguinPlot.Gough <- ggplot(penguin.Gough, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Gough
+#Regression
+Gough.linearModel <- lm(Volume~AorB*Year, data = penguin.Gough)
+Gough.linearModel
+summary(Gough.linearModel)
+
+#Inaccessible     inaccessible island only has U eggs
+penguinPlot.Inaccessible <- ggplot(penguin.Inaccessible, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Inaccessible
+#Regression
+Inaccessible.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
+Inaccessible.linearModel
+summary(Inaccessible.linearModel)
+#inaccessible island only has U eggs
+
+
+#nightingale   nightingale island only differentiated between a and b eggs in 2014
+penguinPlot.Nightingale <- ggplot(penguin.Nightingale, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Nightingale
+#Regression
+Nightingale.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
+Nightingale.linearModel
+summary(Nightingale.linearModel)
+#nightingale island only differentiated between a and b eggs in 2014
+
