@@ -231,6 +231,10 @@ penguin.data$ProbabilityA <- 1 / (1 + exp(penguin.data$discriminant))
 penguin.data$Decision <- ifelse(penguin.data$ProbabilityA >= 0.66, "A", ifelse(penguin.data$ProbabilityA <= 0.33, "B", "U"))
 
 
+write.csv(penguin.data, "penguin.data.csv")
+View(penguin.data)
+#so... from here on out, penguin.data refers to penguin.data.csv, not penguin.csv
+
 
 #Remake plots with Discriminant function data
 #Matts Experimental plots
@@ -243,8 +247,6 @@ penguinPlot2 <- ggplot(penguin.data, aes(Year, Volume, color = Decision)) +
 
 #Call Plot
 penguinPlot2
-
-
 
 #Regression, Find the Slope
 linearModel2 <- lm(Volume~Decision*Year, data = penguin.data)
@@ -293,10 +295,10 @@ penguinPlot.Inaccessible2
 Inaccessible.linearModel2 <- lm(Volume~Decision*Year, data = penguin.Inaccessible)
 Inaccessible.linearModel2
 summary(Inaccessible.linearModel2)
-#inaccessible island only has U eggs
 
 
-#nightingale   nightingale island only differentiated between a and b eggs in 2014
+
+#nightingale  
 penguinPlot.Nightingale2 <- ggplot(penguin.Nightingale, aes(Year, Volume, color = Decision)) + 
   geom_point(aes(fill = Decision), pch = 21) +
   scale_fill_manual(values = c('red', 'green', 'blue')) +
@@ -308,21 +310,19 @@ penguinPlot.Nightingale2
 Nightingale.linearModel2 <- lm(Volume~Decision*Year, data = penguin.Inaccessible)
 Nightingale.linearModel2
 summary(Nightingale.linearModel2)
-#nightingale island only differentiated between a and b eggs in 2014
 
 
 #by climate zone
+
+#North
 penguinPlotnorth <- ggplot(penguin.north, aes(Year, Volume, color = Decision)) + 
   geom_point(aes(fill = Decision), pch = 21) +
   scale_fill_manual(values = c('red', 'green', 'blue')) +
   geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
   theme_bw()
 
-
 #Call Plot
 penguinPlotnorth
-
-
 
 #Regression, Find the Slope
 linearModelnorth <- lm(Volume~Decision*Year, data = penguin.north)
@@ -332,4 +332,60 @@ linearModelnorth
 summary(linearModelnorth)
 
 
-write.csv(penguin.data, "penguin.data.csv")
+#South
+
+penguinPlotsouth <- ggplot(penguin.south, aes(Year, Volume, color = Decision)) + 
+  geom_point(aes(fill = Decision), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+
+#Call Plot
+penguinPlotsouth
+
+#Regression, Find the Slope
+linearModelsouth <- lm(Volume~Decision*Year, data = penguin.south)
+
+linearModelsouth
+
+summary(linearModelsouth)
+
+
+
+#Things to do next: some of the linear models from above that'll be affected by the discriminant change
+
+
+penguin.A=penguin.data[penguin.data$Decision=="A",]
+penguin.B=penguin.data[penguin.data$Decision=="B",]
+
+
+penguin2A = aov(Volume~Location2 , data=penguin.A)
+anova(penguin2A)
+TukeyHSD(penguin2A, "Location", ordered=FALSE)
+
+penguin2B = aov(Volume~Location2 , data=penguin.B)
+anova(penguin2B)
+TukeyHSD(penguin2B, "Location", ordered=FALSE)
+
+#subset a or b egg for each island
+penguin.Nightingale.A=penguin.data[penguin.A$Location=="Nightingale",]
+penguin.Tristan.A=penguin.data[penguin.A$Location=="Tristan",]
+penguin.Gough.A=penguin.data[penguin.A$Location2=="Gough",]
+penguin.Inaccessible.A=penguin.data[penguin.A$Location=="Inaccessible",]
+
+
+#subset by climate zone
+penguin.north=penguin.data[penguin.data$Zone=="Other",]
+penguin.south=penguin.data[penguin.data$Zone=="Gough",]
+
+#subset A or B egg for each climate zone
+penguin.north.A=penguin.data[penguin.A$Zone=="Other",]
+penguin.south.A=penguin.data[penguin.A$Zone=="Gough",]
+
+
+penguin.north.B=penguin.data[penguin.B$Zone=="Other",]
+penguin.south.B=penguin.data[penguin.B$Zone=="Gough",]
+
+#correlation between SST and egg size
+
+
