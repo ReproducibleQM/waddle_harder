@@ -37,16 +37,16 @@ penguin.no.u=penguin.data[penguin.data$A.or.B.egg!="U",]
 
 #subset by location
 #Nightingale and Alex grouped together
-penguin.Nightingale=penguin.data[penguin.data$Location=="Nightingale",]
+penguin.Nightingale=penguin.data[penguin.data$Location2=="Nightingale",]
 penguin.Tristan=penguin.data[penguin.data$Location=="Tristan",]
-penguin.Gough=penguin.data[penguin.data$Location2=="Gough",]
+penguin.Gough=penguin.data[penguin.data$Location=="Gough",]
 penguin.Inaccessible=penguin.data[penguin.data$Location=="Inaccessible",]
 
 
 #subset a or b egg for each island
-penguin.Nightingale.a=penguin.data[penguin.a$Location=="Nightingale",]
+penguin.Nightingale.a=penguin.data[penguin.a$Location2=="Nightingale",]
 penguin.Tristan.a=penguin.data[penguin.a$Location=="Tristan",]
-penguin.Gough.a=penguin.data[penguin.a$Location2=="Gough",]
+penguin.Gough.a=penguin.data[penguin.a$Location=="Gough",]
 penguin.Inaccessible.a=penguin.data[penguin.a$Location=="Inaccessible",]
 
 
@@ -368,9 +368,9 @@ anova(penguin2B)
 TukeyHSD(penguin2B, "Location", ordered=FALSE)
 
 #subset a or b egg for each island
-penguin.Nightingale.A=penguin.data[penguin.A$Location=="Nightingale",]
+penguin.Nightingale.A=penguin.data[penguin.A$Location2=="Nightingale",]
 penguin.Tristan.A=penguin.data[penguin.A$Location=="Tristan",]
-penguin.Gough.A=penguin.data[penguin.A$Location2=="Gough",]
+penguin.Gough.A=penguin.data[penguin.A$Location=="Gough",]
 penguin.Inaccessible.A=penguin.data[penguin.A$Location=="Inaccessible",]
 
 
@@ -385,6 +385,17 @@ penguin.south.A=penguin.data[penguin.A$Zone=="Gough",]
 
 penguin.north.B=penguin.data[penguin.B$Zone=="Other",]
 penguin.south.B=penguin.data[penguin.B$Zone=="Gough",]
+
+#linear model of A eggs or B eggs by climate zone
+
+penguin.Zone.A.lm = aov(Volume~Zone, data=penguin.A)
+anova(penguin.Zone.A.lm)
+
+penguin.Zone.B.lm = aov(Volume~Zone, data=penguin.B)
+anova(penguin.Zone.B.lm)
+
+
+
 
 #correlation between SST and egg size
 
