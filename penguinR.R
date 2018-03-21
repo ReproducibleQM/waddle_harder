@@ -7,6 +7,14 @@
 #needed packages
 library("nlme")
 library("ggplot2")
+library(car)
+library(plyr)
+library(lme4)
+library(doBy)
+library(reshape2)
+library(AICmodavg)
+library(vegan)
+
 
 #loading the data
 penguin.data<-read.csv("penguin.csv")
