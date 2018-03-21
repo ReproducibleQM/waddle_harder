@@ -67,7 +67,7 @@ penguin.Inaccessible.new=penguin.new[penguin.new$Location=="Inaccessible",]
 
 #giving me trouble with there being only one location for some years. also doesn't like using Day as a random factor
 
-penguin.vol.location=lme(fixed=Volume~Location, random=~1|Length..mm., data=penguin.data)
+penguin.vol.location=lme(fixed=Volume~Location, random=~1|Length, data=penguin.data)
 anova(penguin.vol.location)
 
 
@@ -126,7 +126,7 @@ anova(Inaccessiblenewlm)
 
 
 # Plot Year and Length
-plot(penguin.data$Length..mm.~penguin.data$Year)
+plot(penguin.data$Length~penguin.data$Year)
 
 
 qplot(Year,Volume, data=penguin.a)
@@ -212,12 +212,15 @@ Nightingale.linearModel
 summary(Nightingale.linearModel)
 #nightingale island only differentiated between a and b eggs in 2014
 
+
+
 # Discriminant Function from Bond et al. 2016
 # D = 0.73 * Length + 0.5 * Breadth - 72.39
 # Pr(A) = 1 / (1+e^(-D))
 penguin.new$discriminant <- 0.73 * penguin.new$Length+ 0.5 * penguin.new$Breadth - 72.39
 penguin.new$ProbabilityA <- 1 / (1 + exp(-penguin.new$discriminant))
 penguin.new$Decision <- ifelse(penguin.new$ProbabilityA >= 0.66, "A", ifelse(penguin.new$ProbabilityA <= 0.33, "B", "U"))
+
 
 
 #Remake plots with Discriminant function data
