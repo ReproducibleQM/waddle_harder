@@ -227,7 +227,7 @@ summary(Nightingale.linearModel)
 # D = 0.73 * Length + 0.5 * Breadth - 72.39
 # Pr(A) = 1 / (1+e^(-D))
 penguin.data$discriminant <- 0.73 * penguin.data$Length+ 0.5 * penguin.data$Breadth - 72.39
-penguin.data$ProbabilityA <- 1 / (1 + exp(-penguin.data$discriminant))
+penguin.data$ProbabilityA <- 1 / (1 + exp(penguin.data$discriminant))
 penguin.data$Decision <- ifelse(penguin.data$ProbabilityA >= 0.66, "A", ifelse(penguin.data$ProbabilityA <= 0.33, "B", "U"))
 
 
