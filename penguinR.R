@@ -14,6 +14,7 @@ library(doBy)
 library(reshape2)
 library(AICmodavg)
 library(vegan)
+library(reshape2)
 
 
 #loading the data
@@ -230,6 +231,30 @@ penguin.data$discriminant <- 0.73 * penguin.data$Length+ 0.5 * penguin.data$Brea
 penguin.data$ProbabilityA <- 1 / (1 + exp(penguin.data$discriminant))
 penguin.data$Decision <- ifelse(penguin.data$ProbabilityA >= 0.66, "A", ifelse(penguin.data$ProbabilityA <= 0.33, "B", "U"))
 
+#bring in the SST data
+SST<-read.csv(file="SST_TG.csv", header=T)
+#need to reshape data to long form
+
+melted_sst<-melt(SST, id=c("Year", "Month"))
+# create an object with the SSTs
+sst_island<-melted_sst[which(melted_sst$variable=="Tristan"|melted_sst$variable=="Gough"),]
+#create an object with the residuals
+sst_residual<-melted_sst[which(melted_sst$variable=="Tristan_Residual"| melted_sst$variable =="Gough_Residual"),]
+
+#give meaningful column names
+names(sst_island)<-c("Year", "Month", "Zone", "SST")
+names(sst_residual)<-c("Year", "Month", "Zone", "SST_Residual")
+
+#harmonize variable names
+sst_residual$Zone<-gsub("_Residual", "", sst_residual$Zone)
+
+#merge the data
+sst_working<-merge(sst_island, sst_residual)
+#harmonize naming conventions with the penguin data
+sst_working$Zone<-gsub("Tristan", "Other", sst_working$Zone)
+
+#Merge the SST data with the penguin data
+all_data<-merge(penguin.data, sst_working)
 
 write.csv(penguin.data, "penguin.data.csv")
 View(penguin.data)
