@@ -253,6 +253,9 @@ sst_working<-merge(sst_island, sst_residual)
 #harmonize naming conventions with the penguin data
 sst_working$Zone<-gsub("Tristan", "Other", sst_working$Zone)
 
+#create a data set with only october ssts
+sst_1mo<-sst_working[which(sst_working$Month==10),]
+
 #Merge the SST data with the penguin data
 all_data<-merge(penguin.data, sst_working)
 
