@@ -248,20 +248,40 @@ names(sst_residual)<-c("Year", "Month", "Zone", "SST_Residual")
 #harmonize variable names
 sst_residual$Zone<-gsub("_Residual", "", sst_residual$Zone)
 
-#merge the data
-sst_working<-merge(sst_island, sst_residual)
-#harmonize naming conventions with the penguin data
-sst_working$Zone<-gsub("Tristan", "Other", sst_working$Zone)
-
-#create a data set with only october ssts
-sst_1mo<-sst_working[which(sst_working$Month==10),]
-
 #Merge the SST data with the penguin data
-all_data<-merge(penguin.data, sst_working)
+#all_data<-merge(penguin.data, sst_working, by=c("Year", "Zone")
 
 write.csv(penguin.data, "penguin.data.csv")
 View(penguin.data)
 #so... from here on out, penguin.data refers to penguin.data.csv, not penguin.csv
+
+#merge the data
+sst_working<-merge(sst_island, sst_residual)
+#harmonize naming conventions with the penguin data
+sst_working$Zone<-gsub("Tristan", "Other", sst_working$Zone)
+SST_Gough = sst_working[which(sst_working$Zone=='Gough'),]
+SST_North= sst_working[which(sst_working$Zone=='Other'),]
+penguin.north$Zone <- gsub('Other', 'North',penguin.north$Zone)
+
+
+#create a data set with only october ssts
+sst_metrics<-sst_working[which(sst_working$Month==10),]
+sst_metrics$Month<-NULL
+
+
+
+years_in_set<-unique(penguin.north$Year)
+lags<-1:16
+
+for (i in 1:length(penguin.north$Year){
+  year=penguin.north[i]
+  for (j in 1:length(lags)){
+    sst_data<-SST_North[which(SST_North$Year<year+1),]
+  }
+}
+
+
+
 
 
 #Remake plots with Discriminant function data
