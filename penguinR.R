@@ -279,7 +279,7 @@ sst_metrics$Month<-NULL
 years_in_set<-unique(penguin.north$Year)
 lags<-1:16
 
-for (i in 1:length(penguin.north$Year){
+for (i in 1:length(penguin.north$Year)){
   year=penguin.north[i]
   #### create an empty data frame to put your calculations into 
   #### should be something like year, lag, average, max, min in columns
