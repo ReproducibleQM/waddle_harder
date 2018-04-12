@@ -259,6 +259,12 @@ View(penguin.data)
 sst_working<-merge(sst_island, sst_residual)
 #harmonize naming conventions with the penguin data
 sst_working$Zone<-gsub("Tristan", "Other", sst_working$Zone)
+
+
+#### sort data by site, then by year, then by month
+  #may already be sorted this way, but probably good to have a command to explicitly do it in case data gets mixed up
+#####insert index variable here
+
 SST_Gough = sst_working[which(sst_working$Zone=='Gough'),]
 SST_North= sst_working[which(sst_working$Zone=='Other'),]
 penguin.north$Zone <- gsub('Other', 'North',penguin.north$Zone)
@@ -275,9 +281,15 @@ lags<-1:16
 
 for (i in 1:length(penguin.north$Year){
   year=penguin.north[i]
+  #### create an empty data frame to put your calculations into 
+  #### should be something like year, lag, average, max, min in columns
   for (j in 1:length(lags)){
+    ####find the index of year i, month 10 in sst data
     sst_data<-SST_North[which(SST_North$Year<year+1),]
-  }
+    ####then use this index to subset the data by j
+    #### then perform the calculation to get the average, max and min for j
+    ####then add these values to the data frame, with a label for year
+      }
 }
 
 
