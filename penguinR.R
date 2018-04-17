@@ -282,14 +282,15 @@ years_in_set<-unique(penguin.north$Year)
 lags<-1:16
 
 for (i in 1:length(penguin.north$Year)){
-  year=penguin.north[i]
+  year=penguin.north$Year[i]
   #### create an empty data frame to put your calculations into 
   #### should be something like year, lag, average, max, min in columns
-  indexline<-SST[which(SST$Year==year&SST$Month==10),]
+  indexline<-SST[(SST$Year==year) & (SST$Month==10),]
   indexno<-as.numeric(indexline$index[1])
   for (j in 1:length(lags)){
     
     sst_data<-SST[which(SST$index<indexno+1 & SST$index>indexno-j),]
+    sst_north_good(i,) = sst_data$Tristan
     
     ####then use this index to subset the data by j
     #### then perform the calculation to get the average, max and min for j
