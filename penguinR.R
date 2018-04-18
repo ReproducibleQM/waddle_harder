@@ -280,6 +280,8 @@ sst_metrics$Month<-NULL
 
 years_in_set<-unique(penguin.north$Year)
 lags<-1:16
+sst_north_good = matrix(0,nrow=length(penguin.north$Year),ncol=length(lags)) # Zero matrix for north, will fill rows w/ samples, and cols w/ lags
+sst_south_good = matrix(0,nrow=length(penguin.south$Year),ncol=length(lags)) # Zero matrix for Gough, will fill rows w/ samples, and cols w/ lags
 
 for (i in 1:length(penguin.north$Year)){
   year=penguin.north$Year[i]
@@ -289,13 +291,16 @@ for (i in 1:length(penguin.north$Year)){
   indexno<-as.numeric(indexline$index[1])
   for (j in 1:length(lags)){
     
-    sst_data<-SST[which(SST$index<indexno+1 & SST$index>indexno-j),]
-    sst_north_good(i,) = sst_data$Tristan
+    sst_data<-SST[which(SST$index<indexno+1 & SST$index>indexno-j),] # This subsets the SST for lags, really only 16 is important
+    
     
     ####then use this index to subset the data by j
     #### then perform the calculation to get the average, max and min for j
     ####then add these values to the data frame, with a label for year
-      }
+  }
+  # This snippet takes all 16 lags (column) and slaps it into a row representing the lags for each sample...total length 641 for North
+  # The values in the 1st column are the sst for 16 months before egg, 2nd column is 15 before, etc....
+  sst_north_good[i,] = sst_data$Tristan 
 }
 
 
