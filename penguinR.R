@@ -3,7 +3,7 @@
 #created new variables: Location2 =gough and alex islands are merged. changed the name alex to gough
 #                     : Zone =gough island separated from all other islands.
 
-
+remove('Final_North', 'Final_South')
 #needed packages
 library(nlme)
 library(ggplot2)
@@ -50,11 +50,6 @@ penguin.Tristan.a=penguin.data[penguin.a$Location=="Tristan",]
 penguin.Gough.a=penguin.data[penguin.a$Location=="Gough",]
 penguin.Inaccessible.a=penguin.data[penguin.a$Location=="Inaccessible",]
 
-
-
-#subset by climate zone
-penguin.north=penguin.data[penguin.data$Zone=="Other",]
-penguin.south=penguin.data[penguin.data$Zone=="Gough",]
 
 #Subset by years
 
@@ -222,6 +217,14 @@ penguin.data$discriminant <- 0.73 * penguin.data$Length+ 0.5 * penguin.data$Brea
 penguin.data$ProbabilityA <- 1 / (1 + exp(penguin.data$discriminant))
 penguin.data$Decision <- ifelse(penguin.data$ProbabilityA >= 0.66, "A", ifelse(penguin.data$ProbabilityA <= 0.33, "B", "U"))
 
+
+
+#subset by climate zone
+penguin.north=penguin.data[penguin.data$Zone=="Other",]
+penguin.south=penguin.data[penguin.data$Zone=="Gough",]
+
+
+
 #bring in the SST data
 SST<-read.csv(file="SST_TG.csv", header=T)
 #need to reshape data to long form
@@ -270,7 +273,7 @@ sst_metrics$Month<-NULL
 
 
 years_in_set<-unique(penguin.north$Year)
-lags<-1:16
+lags<-1:17
 sst_north_lags = matrix(0,nrow=length(penguin.north$Year),ncol=length(lags)) # Zero matrix for north, will fill rows w/ samples, and cols w/ lags
 sst_south_lags = matrix(0,nrow=length(penguin.south$Year),ncol=length(lags)) # Zero matrix for Gough, will fill rows w/ samples, and cols w/ lags
 
@@ -320,10 +323,20 @@ for (i in 1:length(penguin.south$Year)){
 # turn matrix back into data.frame
 sst_south_lags2 = data.frame(sst_south_lags)
 sst_north_lags2 = data.frame(sst_north_lags)
+sst_lags_all = rbind(sst_north_lags2, sst_south_lags2)
 
 # merge lags and penguin data
-Final_North = merge(penguin.north, sst_north_lags2)
-Final_South = merge(penguin.south, sst_south_lags2)
+Final_North = cbind(penguin.north, sst_north_lags2)
+Final_South = cbind(penguin.south, sst_south_lags2)
+
+Final_All = rbind(Final_North, Final_South)
+
+# Do calculations on the lags
+Final_All$avg = rowMeans(sst_lags_all)
+Final_All$min = apply(sst_lags_all,1,min)
+Final_All$max = apply(sst_lags_all,1,max)
+
+
 
 
 #Remake plots with Discriminant function data
