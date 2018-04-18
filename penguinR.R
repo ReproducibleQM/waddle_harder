@@ -51,11 +51,6 @@ penguin.Gough.a=penguin.data[penguin.a$Location=="Gough",]
 penguin.Inaccessible.a=penguin.data[penguin.a$Location=="Inaccessible",]
 
 
-
-#subset by climate zone
-penguin.north=penguin.data[penguin.data$Zone=="Other",]
-penguin.south=penguin.data[penguin.data$Zone=="Gough",]
-
 #Subset by years
 
 #cutting out all of the years with a single specimen
@@ -230,6 +225,14 @@ summary(Nightingale.linearModel)
 penguin.data$discriminant <- 0.73 * penguin.data$Length+ 0.5 * penguin.data$Breadth - 72.39
 penguin.data$ProbabilityA <- 1 / (1 + exp(penguin.data$discriminant))
 penguin.data$Decision <- ifelse(penguin.data$ProbabilityA >= 0.66, "A", ifelse(penguin.data$ProbabilityA <= 0.33, "B", "U"))
+
+
+
+#subset by climate zone
+penguin.north=penguin.data[penguin.data$Zone=="Other",]
+penguin.south=penguin.data[penguin.data$Zone=="Gough",]
+
+
 
 #bring in the SST data
 SST<-read.csv(file="SST_TG.csv", header=T)
