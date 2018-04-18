@@ -3,7 +3,7 @@
 #created new variables: Location2 =gough and alex islands are merged. changed the name alex to gough
 #                     : Zone =gough island separated from all other islands.
 
-
+remove('Final_North', 'Final_South')
 #needed packages
 library(nlme)
 library(ggplot2)
@@ -334,8 +334,8 @@ sst_south_lags2 = data.frame(sst_south_lags)
 sst_north_lags2 = data.frame(sst_north_lags)
 
 # merge lags and penguin data
-Final_North = merge(penguin.north, sst_north_lags2)
-Final_South = merge(penguin.south, sst_south_lags2)
+Final_North = merge(penguin.north, sst_north_lags2,all.x = TRUE)
+Final_South = merge(penguin.south, sst_south_lags2,all.x = TRUE)
 
 
 #Remake plots with Discriminant function data
