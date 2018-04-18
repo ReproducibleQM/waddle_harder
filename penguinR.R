@@ -280,8 +280,8 @@ sst_metrics$Month<-NULL
 
 years_in_set<-unique(penguin.north$Year)
 lags<-1:16
-sst_north_good = matrix(0,nrow=length(penguin.north$Year),ncol=length(lags)) # Zero matrix for north, will fill rows w/ samples, and cols w/ lags
-sst_south_good = matrix(0,nrow=length(penguin.south$Year),ncol=length(lags)) # Zero matrix for Gough, will fill rows w/ samples, and cols w/ lags
+sst_north_lags = matrix(0,nrow=length(penguin.north$Year),ncol=length(lags)) # Zero matrix for north, will fill rows w/ samples, and cols w/ lags
+sst_south_lags = matrix(0,nrow=length(penguin.south$Year),ncol=length(lags)) # Zero matrix for Gough, will fill rows w/ samples, and cols w/ lags
 
 for (i in 1:length(penguin.north$Year)){
   year=penguin.north$Year[i]
@@ -300,11 +300,37 @@ for (i in 1:length(penguin.north$Year)){
   }
   # This snippet takes all 16 lags (column) and slaps it into a row representing the lags for each sample...total length 641 for North
   # The values in the 1st column are the sst for 16 months before egg, 2nd column is 15 before, etc....
-  sst_north_good[i,] = sst_data$Tristan 
+  sst_north_lags[i,] = sst_data$Tristan 
 }
 
+# Penguin South Lags
+for (i in 1:length(penguin.south$Year)){
+  year=penguin.south$Year[i]
+  #### create an empty data frame to put your calculations into 
+  #### should be something like year, lag, average, max, min in columns
+  indexline<-SST[(SST$Year==year) & (SST$Month==10),]
+  indexno<-as.numeric(indexline$index[1])
+  for (j in 1:length(lags)){
+    
+    sst_data<-SST[which(SST$index<indexno+1 & SST$index>indexno-j),] # This subsets the SST for lags, really only 16 is important
+    
+    
+    ####then use this index to subset the data by j
+    #### then perform the calculation to get the average, max and min for j
+    ####then add these values to the data frame, with a label for year
+  }
+  # This snippet takes all 16 lags (column) and slaps it into a row representing the lags for each sample...total length 641 for North
+  # The values in the 1st column are the sst for 16 months before egg, 2nd column is 15 before, etc....
+  sst_south_lags[i,] = sst_data$Gough 
+}
 
+# turn matrix back into data.frame
+sst_south_lags2 = data.frame(sst_south_lags)
+sst_north_lags2 = data.frame(sst_north_lags)
 
+# merge lags and penguin data
+Final_North = merge(penguin.north, sst_north_lags2)
+Final_South = merge(penguin.south, sst_south_lags2)
 
 
 #Remake plots with Discriminant function data
