@@ -14,7 +14,7 @@ library(doBy)
 library(reshape2)
 library(AICmodavg)
 library(vegan)
-library(reshape2)
+
 
 
 #loading the data
