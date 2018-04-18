@@ -52,6 +52,10 @@ penguin.Inaccessible.a=penguin.data[penguin.a$Location=="Inaccessible",]
 
 
 
+#subset by climate zone
+penguin.north=penguin.data[penguin.data$Zone=="Other",]
+penguin.south=penguin.data[penguin.data$Zone=="Gough",]
+
 #Subset by years
 
 #cutting out all of the years with a single specimen
@@ -227,12 +231,6 @@ penguin.data$discriminant <- 0.73 * penguin.data$Length+ 0.5 * penguin.data$Brea
 penguin.data$ProbabilityA <- 1 / (1 + exp(penguin.data$discriminant))
 penguin.data$Decision <- ifelse(penguin.data$ProbabilityA >= 0.66, "A", ifelse(penguin.data$ProbabilityA <= 0.33, "B", "U"))
 
-
-
-#subset by climate zone
-penguin.north=penguin.data[penguin.data$Zone=="Other",]
-penguin.south=penguin.data[penguin.data$Zone=="Gough",]
-
 #bring in the SST data
 SST<-read.csv(file="SST_TG.csv", header=T)
 #need to reshape data to long form
@@ -303,6 +301,7 @@ for (i in 1:length(penguin.north$Year)){
   # This snippet takes all 16 lags (column) and slaps it into a row representing the lags for each sample...total length 641 for North
   # The values in the 1st column are the sst for 16 months before egg, 2nd column is 15 before, etc....
   sst_north_lags[i,] = sst_data$Tristan 
+  sst_north_lags=sst_north_lags[,c(length(lags):1)]
 }
 
 # Penguin South Lags
@@ -324,6 +323,7 @@ for (i in 1:length(penguin.south$Year)){
   # This snippet takes all 16 lags (column) and slaps it into a row representing the lags for each sample...total length 641 for North
   # The values in the 1st column are the sst for 16 months before egg, 2nd column is 15 before, etc....
   sst_south_lags[i,] = sst_data$Gough 
+  sst_south_lags=sst_south_lags[,c(length(lags):1)]
 }
 
 # turn matrix back into data.frame
