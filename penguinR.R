@@ -145,16 +145,7 @@ qplot(Year,Volume, data=penguin.u)
 qplot(Year,Volume, data=penguin.Tristan)
 
 
-#Matts Experimental plots
-penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
-    scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
 
-
-#Call Plot
-penguinPlot
 
 
 
@@ -494,10 +485,23 @@ penguin.Zone.B.lm = aov(Volume~Zone, data=penguin.B)
 anova(penguin.Zone.B.lm)
 
 
-#goals
+
 #plot the A eggs and B eggs north and south separated on the same graph
+shape1 <- c(21, 22)
+
+#Matts Experimental plots
+penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = Decision, shape = as.factor(Zone))) + 
+  geom_point(aes(fill = Decision, size = 4)) +
+  scale_shape_manual(values = shape1) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', aes(linetype = Zone), size = 2, fullrange = TRUE) + 
+  scale_linetype_manual(values = c(1, 2)) +
+  theme_bw()
+
+
+#Call Plot
+penguinPlot
+
+#goals
 #plot correlation between SST and egg size
-
-
-
 
