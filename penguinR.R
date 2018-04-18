@@ -334,7 +334,7 @@ sst_south_lags2 = data.frame(sst_south_lags)
 sst_north_lags2 = data.frame(sst_north_lags)
 
 # merge lags and penguin data
-Final_North = merge(penguin.north, sst_north_lags2,all.x = TRUE)
+Final_North = cbind(penguin.north, sst_north_lags2)
 Final_South = merge(penguin.south, sst_south_lags2,all.x = TRUE)
 
 
