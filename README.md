@@ -8,6 +8,9 @@ Over the past 50 years, the population of Rockhopper Penguins on the Tristan da 
 
 # How to Contribute
 
+paper in progress
+https://docs.google.com/document/d/1PTyyMoGYUeWsS5QX_exXn0PrZglyF8B4n5GEZjcLK3E/edit
+
 # Authors
 Tyler Smith, Ryan Adams, Anthony Minerovic, Matthew Stiller
 
