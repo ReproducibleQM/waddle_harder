@@ -285,7 +285,11 @@ years_in_set<-unique(penguin.north$Year)
 lags<-1:17
 sst_north_lags = matrix(0,nrow=length(penguin.north$Year),ncol=length(lags)) # Zero matrix for north, will fill rows w/ samples, and cols w/ lags
 sst_south_lags = matrix(0,nrow=length(penguin.south$Year),ncol=length(lags)) # Zero matrix for Gough, will fill rows w/ samples, and cols w/ lags
+sst_north_lags_residual = matrix(0,nrow=length(penguin.north$Year),ncol=length(lags)) # Zero matrix for north, will fill rows w/ samples, and cols w/ lags
+sst_south_lags_residual = matrix(0,nrow=length(penguin.south$Year),ncol=length(lags)) # Zero matrix for Gough, will fill rows w/ samples, and cols w/ lags
 
+
+## North Lags SST
 for (i in 1:length(penguin.north$Year)){
   year=penguin.north$Year[i]
   #### create an empty data frame to put your calculations into 
@@ -305,6 +309,28 @@ for (i in 1:length(penguin.north$Year)){
   # The values in the 1st column are the sst for 16 months before egg, 2nd column is 15 before, etc....
   sst_north_lags[i,] = sst_data$Tristan 
   sst_north_lags=sst_north_lags[,c(length(lags):1)]
+}
+
+## North Lags SST Residual
+for (i in 1:length(penguin.north$Year)){
+  year=penguin.north$Year[i]
+  #### create an empty data frame to put your calculations into 
+  #### should be something like year, lag, average, max, min in columns
+  indexline<-SST[(SST$Year==year) & (SST$Month==10),]
+  indexno<-as.numeric(indexline$index[1])
+  for (j in 1:length(lags)){
+    
+    sst_data<-SST[which(SST$index<indexno+1 & SST$index>indexno-j),] # This subsets the SST for lags, really only 16 is important
+    
+    
+    ####then use this index to subset the data by j
+    #### then perform the calculation to get the average, max and min for j
+    ####then add these values to the data frame, with a label for year
+  }
+  # This snippet takes all 16 lags (column) and slaps it into a row representing the lags for each sample...total length 641 for North
+  # The values in the 1st column are the sst for 16 months before egg, 2nd column is 15 before, etc....
+  sst_north_lags_residual[i,] = sst_data$Tristan_Residual
+  sst_north_lags_residual=sst_north_lags_residual[,c(length(lags):1)]
 }
 
 # Penguin South Lags
@@ -329,23 +355,75 @@ for (i in 1:length(penguin.south$Year)){
   sst_south_lags=sst_south_lags[,c(length(lags):1)]
 }
 
+## South Lags SST Residual
+for (i in 1:length(penguin.south$Year)){
+  year=penguin.south$Year[i]
+  #### create an empty data frame to put your calculations into 
+  #### should be something like year, lag, average, max, min in columns
+  indexline<-SST[(SST$Year==year) & (SST$Month==10),]
+  indexno<-as.numeric(indexline$index[1])
+  for (j in 1:length(lags)){
+    
+    sst_data<-SST[which(SST$index<indexno+1 & SST$index>indexno-j),] # This subsets the SST for lags, really only 16 is important
+    
+    
+    ####then use this index to subset the data by j
+    #### then perform the calculation to get the average, max and min for j
+    ####then add these values to the data frame, with a label for year
+  }
+  # This snippet takes all 16 lags (column) and slaps it into a row representing the lags for each sample...total length 641 for North
+  # The values in the 1st column are the sst for 16 months before egg, 2nd column is 15 before, etc....
+  sst_south_lags_residual[i,] = sst_data$Gough_Residual
+  sst_south_lags_residual=sst_south_lags_residual[,c(length(lags):1)]
+}
+
 # turn matrix back into data.frame
 sst_south_lags2 = data.frame(sst_south_lags)
 sst_north_lags2 = data.frame(sst_north_lags)
+sst_north_lags_residual2 = data.frame(sst_north_lags_residual)
+sst_south_lags_residual2 = data.frame(sst_south_lags_residual)
 sst_lags_all = rbind(sst_north_lags2, sst_south_lags2)
+Residual_lags_all = rbind(sst_north_lags_residual2, sst_south_lags_residual2)
 
 # merge lags and penguin data
 Final_North = cbind(penguin.north, sst_north_lags2)
 Final_South = cbind(penguin.south, sst_south_lags2)
+Final_North_Residuals = cbind(penguin.north, sst_north_lags_residual2)
+Final_South_Residuals = cbind(penguin.south, sst_south_lags_residual2)
+
 
 Final_All = rbind(Final_North, Final_South)
+Final_All_Residual = rbind(Final_North_Residuals, Final_South_Residuals)
 
 # Do calculations on the lags
-Final_All$avg = rowMeans(sst_lags_all)
+Final_All$avg2 = rowMeans(sst_lags_all[1:2])
+Final_All$avg3 = rowMeans(sst_lags_all[1:3])
+Final_All$avg4 = rowMeans(sst_lags_all[1:4])
+
 Final_All$min = apply(sst_lags_all,1,min)
 Final_All$max = apply(sst_lags_all,1,max)
 
+# Do calculations on the lags
+Final_All_Residual$avg2 = rowMeans(Residual_lags_all[1:2])
+Final_All_Residual$avg3 = rowMeans(Residual_lags_all[1:3])
+Final_All_Residual$avg4 = rowMeans(Residual_lags_all[1:4])
 
+Final_All_Residual$min = apply(Residual_lags_all,1,min)
+Final_All_Residual$max = apply(Residual_lags_all,1,max)
+
+
+lm(Final_All_Residual$Volume~Final_All_Residual$avg2)
+plot(Final_All_Residual$avg2,Final_All_Residual$Volume)
+abline(lm(Final_All_Residual$Volume~Final_All_Residual$avg4), col="red") # regression line (y~x)
+abline(lm(Final_All_Residual$Volume~Final_All_Residual$avg2), col="blue") # regression line (y~x)
+abline(lm(Final_All_Residual$Volume~Final_All_Residual$avg3), col="green") # regression line (y~x)
+
+
+lm(Final_All$Volume~Final_All$avg2)
+plot(Final_All$avg2,Final_All$Volume)
+
+# Add fit line
+abline(lm(Final_All$Volume~Final_All$avg2), col="red") # regression line (y~x)
 
 
 #Remake plots with Discriminant function data
