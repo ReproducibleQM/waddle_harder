@@ -412,7 +412,7 @@ Final_All_Residual$min = apply(Residual_lags_all,1,min)
 Final_All_Residual$max = apply(Residual_lags_all,1,max)
 
 
-lm(Final_All_Residual$Volume~Final_All_Residual$avg2)
+lm(Final_All_Residual$Volume~Final_All_Residual$avg2+Final_All_Residual$z)
 plot(Final_All_Residual$avg2,Final_All_Residual$Volume)
 abline(lm(Final_All_Residual$Volume~Final_All_Residual$avg4), col="red") # regression line (y~x)
 abline(lm(Final_All_Residual$Volume~Final_All_Residual$avg2), col="blue") # regression line (y~x)
