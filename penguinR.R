@@ -140,16 +140,7 @@ qplot(Year,Volume, data=penguin.u)
 qplot(Year,Volume, data=penguin.Tristan)
 
 
-#Matts Experimental plots
-penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
-    scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
 
-
-#Call Plot
-penguinPlot
 
 
 
@@ -595,10 +586,79 @@ penguin.Zone.B.lm = aov(Volume~Zone, data=penguin.B)
 anova(penguin.Zone.B.lm)
 
 
-#goals
+
 #plot the A eggs and B eggs north and south separated on the same graph
+shape1 <- c(21, 22)
+
+#Matts Experimental plots
+penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = Decision, shape = as.factor(Zone))) + 
+  geom_point(aes(fill = Decision, size = 4)) +
+  scale_shape_manual(values = shape1) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', aes(linetype = Zone), size = 2, fullrange = TRUE) + 
+  scale_linetype_manual(values = c(1, 2)) +
+  theme_bw()
+
+
+#Call Plot
+penguinPlot
+
+#goals
 #plot correlation between SST and egg size
 
+#packages waterworld loaded prior to running AIC models...
+library(AICcmodavg)
+library(car)
+library(nlme)
+library(doBy)
+library(reshape2)
+library(vegan)
+library(lmtest)
+library(raster)
+library(rgdal)
+library(dismo)
+library(rjava)
+library(maptools)
+library(ROCR)
+library(randomForest)
+library(mgcv)
+library(maps)
+library(sp)
+library(SDMTools)
+library(rgeos)
+library(gbm)
+library(boot)
+library(tigris)
+library(devtools)
+library(broom)
+library(rworldmap)
+library(plyr)
+library(ggplot2)
+library(ggmap)
+library(leaflet)
+library(acs)
+library(spatial.tools)
+library(data.table)
 
 
+#AICc gives you the residual variation, and you choose the candidate model that gives the lowest residual variation. 
 
+#use dataset vbsc to determine the best predictor for 
+
+#Create linear models to assess independent variables effect on dependent variables.... land use on concentrations
+
+
+#AIC models to try out
+
+Cand.models <- list()
+Cand.models[[1]] <- lm(log(NH4+1)~I(PAGT^2)+PAGT, data=vbsc, na.action="na.omit")
+Cand.models[[2]] <- lm(log(NH4+1)~I(PFOR^2)+PFOR, data=vbsc, na.action="na.omit")
+Cand.models[[3]] <- lm(log(NH4+1)~I(PURB^2)+PURB, data=vbsc, na.action="na.omit")
+Cand.models[[4]] <- lm(log(NH4+1)~PAGT, data=vbsc, na.action="na.omit")
+Modnames <- c("%Agrculture", "%Forest", "%Urban", "%Ag-linear")
+
+(aict <- aictab(cand.set = Cand.models, modnames=Modnames, sort=TRUE))
+
+summary(Cand.models[[1]])
+
+###the lower the AIC value, the better!
