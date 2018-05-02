@@ -412,7 +412,17 @@ Final_All_Residual$min = apply(Residual_lags_all,1,min)
 Final_All_Residual$max = apply(Residual_lags_all,1,max)
 
 
-lm(Final_All_Residual$Volume~Final_All_Residual$avg2+Final_All_Residual$z)
+
+# Linear Models
+LM = list()
+LM[[1]] = lm(Final_All_Residual$Volume~Decision+Zone+X1,data=Final_All_Residual)
+LM[[2]] = lm(Final_All_Residual$Volume~Decision+Zone+avg2,data=Final_All_Residual)
+LM[[3]] = lm(Final_All_Residual$Volume~Decision+Zone+avg3,data=Final_All_Residual)
+LM[[4]] = lm(Final_All_Residual$Volume~Decision+Zone+avg4,data=Final_All_Residual)
+LM[[5]] = lm(Final_All_Residual$Volume~Decision+Zone+min,data=Final_All_Residual)
+LM[[6]] = lm(Final_All_Residual$Volume~Decision+Zone+max,data=Final_All_Residual)
+
+# Plots of Linear Model
 plot(Final_All_Residual$avg2,Final_All_Residual$Volume)
 abline(lm(Final_All_Residual$Volume~Final_All_Residual$avg4), col="red") # regression line (y~x)
 abline(lm(Final_All_Residual$Volume~Final_All_Residual$avg2), col="blue") # regression line (y~x)
