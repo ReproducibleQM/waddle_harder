@@ -406,12 +406,28 @@ Final_All_Residual$max = apply(Residual_lags_all,1,max)
 
 # Linear Models
 LM = list()
-LM[[1]] = lm(Final_All_Residual$Volume~Decision+Zone+X1,data=Final_All_Residual)
-LM[[2]] = lm(Final_All_Residual$Volume~Decision+Zone+avg2,data=Final_All_Residual)
-LM[[3]] = lm(Final_All_Residual$Volume~Decision+Zone+avg3,data=Final_All_Residual)
-LM[[4]] = lm(Final_All_Residual$Volume~Decision+Zone+avg4,data=Final_All_Residual)
-LM[[5]] = lm(Final_All_Residual$Volume~Decision+Zone+min,data=Final_All_Residual)
-LM[[6]] = lm(Final_All_Residual$Volume~Decision+Zone+max,data=Final_All_Residual)
+LM[[1]] = lm(Final_All_Residual$Volume~Decision+Zone*X1,data=Final_All_Residual)
+LM[[2]] = lm(Final_All_Residual$Volume~Decision+Zone*avg2,data=Final_All_Residual)
+LM[[3]] = lm(Final_All_Residual$Volume~Decision+Zone*avg3,data=Final_All_Residual)
+LM[[4]] = lm(Final_All_Residual$Volume~Decision+Zone*avg4,data=Final_All_Residual)
+LM[[5]] = lm(Final_All_Residual$Volume~Decision+Zone*min,data=Final_All_Residual)
+LM[[6]] = lm(Final_All_Residual$Volume~Decision+Zone*max,data=Final_All_Residual)
+
+Modnames <- c("Month_1", "avg2", "avg3", "avg4", "min", "max")
+
+(aict <- aictab(cand.set = LM, modnames=Modnames, sort=TRUE))
+
+summary(LM[[3]])
+anova(LM[[3]])
+
+#we have weak eveidence for a differnt trend between the two zones, so let's look at them separately
+
+Final_All_Residual_North<-Final_All_Residual[which(Final_All_Residual$Zone=="North"),] 
+Final_All_Residual_South<-Final_All_Residual[which(Final_All_Residual$Zone!="North"),] 
+
+North_SST_model = lm(Volume~Decision+avg3,data=Final_All_Residual_North)
+summary(North_SST_model)
+anova(North_SST_model)
 
 # Plots of Linear Model
 plot(Final_All_Residual$avg2,Final_All_Residual$Volume)
