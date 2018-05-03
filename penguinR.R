@@ -403,6 +403,11 @@ Final_All$max = apply(sst_lags_all,1,max)
 Final_All_Residual$avg2 = rowMeans(Residual_lags_all[1:2])
 Final_All_Residual$avg3 = rowMeans(Residual_lags_all[1:3])
 Final_All_Residual$avg4 = rowMeans(Residual_lags_all[1:4])
+Final_All_Residual$avg5_1 = rowMeans(sst_lags_all[1:5])
+Final_All_Residual$avg5_2 = rowMeans(sst_lags_all[6:10])
+Final_All_Residual$avg5_3 = rowMeans(sst_lags_all[11:15])
+Final_All_Residual$avg8_1 = rowMeans(sst_lags_all[1:8])
+Final_All_Residual$avg8_2 = rowMeans(sst_lags_all[9:16])
 
 Final_All_Residual$min = apply(Residual_lags_all,1,min)
 Final_All_Residual$max = apply(Residual_lags_all,1,max)
@@ -417,8 +422,13 @@ LM[[3]] = lm(Final_All_Residual$Volume~Decision+Zone*avg3,data=Final_All_Residua
 LM[[4]] = lm(Final_All_Residual$Volume~Decision+Zone*avg4,data=Final_All_Residual)
 LM[[5]] = lm(Final_All_Residual$Volume~Decision+Zone*min,data=Final_All_Residual)
 LM[[6]] = lm(Final_All_Residual$Volume~Decision+Zone*max,data=Final_All_Residual)
+LM[[7]] = lm(Final_All_Residual$Volume~Decision+Zone*avg5_1,data=Final_All_Residual)
+LM[[8]] = lm(Final_All_Residual$Volume~Decision+Zone*avg5_2,data=Final_All_Residual)
+LM[[9]] = lm(Final_All_Residual$Volume~Decision+Zone*avg5_3,data=Final_All_Residual)
+LM[[10]] = lm(Final_All_Residual$Volume~Decision+Zone*avg8_1,data=Final_All_Residual)
+LM[[11]] = lm(Final_All_Residual$Volume~Decision+Zone*avg8_2,data=Final_All_Residual)
 
-Modnames <- c("Month_1", "avg2", "avg3", "avg4", "min", "max")
+Modnames <- c("Month_1", "avg2", "avg3", "avg4", "min", "max","avg5_1","avg5_2","avg5_3","avg8_1","avg8_2")
 
 (aict <- aictab(cand.set = LM, modnames=Modnames, sort=TRUE))
 
