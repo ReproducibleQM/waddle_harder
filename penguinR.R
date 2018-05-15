@@ -16,7 +16,6 @@ library(AICmodavg)
 library(vegan)
 
 
-
 #loading the data
 penguin.data<-read.csv("penguin.csv")
 names(penguin.data)
@@ -29,7 +28,6 @@ summary(penguin.data)
 
 
 #subset by egg size
-
 penguin.a=penguin.data[penguin.data$A.or.B.egg=="A",]
 penguin.b=penguin.data[penguin.data$A.or.B.egg=="B",]
 penguin.u=penguin.data[penguin.data$A.or.B.egg=="U",]
@@ -53,167 +51,6 @@ penguin.south.A=penguin.data[penguin.A$Zone=="Gough",]
 
 penguin.north.B=penguin.data[penguin.B$Zone=="Other",]
 penguin.south.B=penguin.data[penguin.B$Zone=="Gough",]
-
-#subset a or b egg for each island
-penguin.Nightingale.a=penguin.data[penguin.a$Location2=="Nightingale",]
-penguin.Tristan.a=penguin.data[penguin.a$Location=="Tristan",]
-penguin.Gough.a=penguin.data[penguin.a$Location=="Gough",]
-penguin.Inaccessible.a=penguin.data[penguin.a$Location=="Inaccessible",]
-
-
-#cutting out all of the years with a single specimen
-penguin.n1<-read.csv("penguin.n1.csv")
-
-
-#cut out years before 2002
-penguin.new=penguin.data[penguin.data$Year>2001,]
-View(penguin.new)
-
-penguin.Gough.new=penguin.new[penguin.new$Location=="Gough",]
-penguin.Nightingale.new=penguin.new[penguin.new$Location2=="Nightingale",]
-penguin.Tristan.new=penguin.new[penguin.new$Location=="Tristan",]
-penguin.Inaccessible.new=penguin.new[penguin.new$Location=="Inaccessible",]
-
-
-#linear models
-
-#giving me trouble with there being only one location for some years. also doesn't like using Day as a random factor
-
-penguin.vol.location=lme(fixed=Volume~Location, random=~1|Length, data=penguin.data)
-anova(penguin.vol.location)
-
-
-
-penguins2all=lm(Volume~Year*Zone, data=penguin.data)
-anova(penguins2all)
-
-
-penguin2all = aov(Volume~Location, data=penguin.data)
-
-TukeyHSD(penguin2all, "Location", ordered=FALSE)
-
-#looks like there's a big difference between gough and the other islands, but the other islands aren't that much different from each other
-
-#now do it for just a-eggs and b-eggs
-
-penguin2a = aov(Volume~Location , data=penguin.a)
-
-TukeyHSD(penguin2a, "Location", ordered=FALSE)
-
-
-penguin2b = aov(Volume~Location , data=penguin.b)
-
-TukeyHSD(penguin2b, "Location", ordered=FALSE)
-
-
-#looking for difference over years on each island separately for all years
-
-Goughlm=lm(Volume~Year, data=penguin.Gough)
-anova(Goughlm)
-
-Tristanlm=lm(Volume~Year, data=penguin.Tristan)
-anova(Tristanlm)
-
-Nightingalelm=lm(Volume~Year, data=penguin.Nightingale)
-anova(Nightingalelm)
-#   nightingale island shows significant change over time for all years
-
-Inaccessiblelm=lm(Volume~Year, data=penguin.Inaccessible)
-anova(Inaccessiblelm)
-
-#looking for difference over years on each island separately from 2002 to 2015
-
-#only worked for gough, which is significant
-Goughnewlm=lm(Volume~Year, data=penguin.Gough.new)
-anova(Goughnewlm)
-
-Tristannewlm=lm(Volume~Year, data=penguin.Tristan.new)
-anova(Tristannewlm)
-
-Nightingalenewlm=lm(Volume~Year, data=penguin.Nightingale.new)
-anova(Nightingalenewlm)
-
-Inaccessiblenewlm=lm(Volume~Year, data=penguin.Inaccessible.new)
-anova(Inaccessiblenewlm)
-
-
-# Plot Year and Length
-plot(penguin.data$Length~penguin.data$Year)
-
-
-qplot(Year,Volume, data=penguin.a)
-qplot(Year,Volume, data=penguin.b)
-qplot(Year,Volume, data=penguin.u)
-qplot(Year,Volume, data=penguin.Tristan)
-
-
-
-
-
-
-#Regression, Find the Slope
-linearModel <- lm(Volume~AorB*Year, data = penguin.data)
-
-linearModel
-
-summary(linearModel)
-
-#Same plot as above, but for each hisland separately
-
-#tristan
-penguinPlot.Tristan <- ggplot(penguin.Tristan, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Tristan
-#Regression
-Tristan.linearModel <- lm(Volume~AorB*Year, data = penguin.Tristan)
-Tristan.linearModel
-summary(Tristan.linearModel)
-
-#Gough
-penguinPlot.Gough <- ggplot(penguin.Gough, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Gough
-#Regression
-Gough.linearModel <- lm(Volume~AorB*Year, data = penguin.Gough)
-Gough.linearModel
-summary(Gough.linearModel)
-
-#Inaccessible     inaccessible island only has U eggs
-penguinPlot.Inaccessible <- ggplot(penguin.Inaccessible, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Inaccessible
-#Regression
-Inaccessible.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
-Inaccessible.linearModel
-summary(Inaccessible.linearModel)
-#inaccessible island only has U eggs
-
-
-#nightingale   nightingale island only differentiated between a and b eggs in 2014
-penguinPlot.Nightingale <- ggplot(penguin.Nightingale, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Nightingale
-#Regression
-Nightingale.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
-Nightingale.linearModel
-summary(Nightingale.linearModel)
-#nightingale island only differentiated between a and b eggs in 2014
 
 
 
@@ -596,13 +433,6 @@ penguin2B = aov(Volume~Location2 , data=penguin.B)
 anova(penguin2B)
 TukeyHSD(penguin2B, "Location", ordered=FALSE)
 
-#subset a or b egg for each island
-penguin.Nightingale.A=penguin.data[penguin.A$Location2=="Nightingale",]
-penguin.Tristan.A=penguin.data[penguin.A$Location=="Tristan",]
-penguin.Gough.A=penguin.data[penguin.A$Location=="Gough",]
-penguin.Inaccessible.A=penguin.data[penguin.A$Location=="Inaccessible",]
-
-
 
 #linear model of A eggs or B eggs by climate zone
 penguin.Zone.A.lm = aov(Volume~Zone, data=penguin.A)
@@ -629,5 +459,66 @@ penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = Decision, shape = 
 #Call Plot
 penguinPlot
 
+# Plot Year and Length
+plot(penguin.data$Length~penguin.data$Year)
 
 
+qplot(Year,Volume, data=penguin.a)
+qplot(Year,Volume, data=penguin.b)
+qplot(Year,Volume, data=penguin.u)
+qplot(Year,Volume, data=penguin.Tristan)
+
+#tristan
+penguinPlot.Tristan <- ggplot(penguin.Tristan, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Tristan
+#Regression
+Tristan.linearModel <- lm(Volume~AorB*Year, data = penguin.Tristan)
+Tristan.linearModel
+summary(Tristan.linearModel)
+
+#Gough
+penguinPlot.Gough <- ggplot(penguin.Gough, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Gough
+#Regression
+Gough.linearModel <- lm(Volume~AorB*Year, data = penguin.Gough)
+Gough.linearModel
+summary(Gough.linearModel)
+
+#Inaccessible     inaccessible island only has U eggs
+penguinPlot.Inaccessible <- ggplot(penguin.Inaccessible, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Inaccessible
+#Regression
+Inaccessible.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
+Inaccessible.linearModel
+summary(Inaccessible.linearModel)
+#inaccessible island only has U eggs
+
+
+#nightingale   nightingale island only differentiated between a and b eggs in 2014
+penguinPlot.Nightingale <- ggplot(penguin.Nightingale, aes(Year, Volume, color = AorB)) + 
+  geom_point(aes(fill = AorB), pch = 21) +
+  scale_fill_manual(values = c('red', 'green', 'blue')) +
+  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
+  theme_bw()
+#Call
+penguinPlot.Nightingale
+#Regression
+Nightingale.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
+Nightingale.linearModel
+summary(Nightingale.linearModel)
+#nightingale island only differentiated between a and b eggs in 2014
