@@ -41,6 +41,15 @@ penguin.Tristan=penguin.data[penguin.data$Location=="Tristan",]
 penguin.Gough=penguin.data[penguin.data$Location=="Gough",]
 penguin.Inaccessible=penguin.data[penguin.data$Location=="Inaccessible",]
 
+
+# Discriminant Function from Bond et al. 2016
+# D = 0.73 * Length + 0.5 * Breadth - 72.39
+# Pr(A) = 1 / (1+e^(-D))
+penguin.data$discriminant <- 0.73 * penguin.data$Length+ 0.5 * penguin.data$Breadth - 72.39
+penguin.data$ProbabilityA <- 1 / (1 + exp(penguin.data$discriminant))
+penguin.data$Decision <- ifelse(penguin.data$ProbabilityA >= 0.66, "A", ifelse(penguin.data$ProbabilityA <= 0.33, "B", "U"))
+
+
 #subset by climate zone
 penguin.north=penguin.data[penguin.data$Zone=="Other",]
 penguin.south=penguin.data[penguin.data$Zone=="Gough",]
@@ -53,25 +62,8 @@ penguin.north.B=penguin.data[penguin.B$Zone=="Other",]
 penguin.south.B=penguin.data[penguin.B$Zone=="Gough",]
 
 
-
-# Discriminant Function from Bond et al. 2016
-# D = 0.73 * Length + 0.5 * Breadth - 72.39
-# Pr(A) = 1 / (1+e^(-D))
-penguin.data$discriminant <- 0.73 * penguin.data$Length+ 0.5 * penguin.data$Breadth - 72.39
-penguin.data$ProbabilityA <- 1 / (1 + exp(penguin.data$discriminant))
-penguin.data$Decision <- ifelse(penguin.data$ProbabilityA >= 0.66, "A", ifelse(penguin.data$ProbabilityA <= 0.33, "B", "U"))
-
-
-
-#subset by climate zone
-penguin.north=penguin.data[penguin.data$Zone=="Other",]
-penguin.south=penguin.data[penguin.data$Zone=="Gough",]
-
-
-
 #bring in the SST data
 SST<-read.csv(file="SST_TG.csv", header=T)
-#need to reshape data to long form
 
 melted_sst<-melt(SST, id=c("Year", "Month"))
 # create an object with the SSTs
@@ -89,32 +81,26 @@ sst_residual$Zone<-gsub("_Residual", "", sst_residual$Zone)
 #Merge the SST data with the penguin data
 #all_data<-merge(penguin.data, sst_working, by=c("Year", "Zone")
 
-write.csv(penguin.data, "penguin.data.csv")
-View(penguin.data)
-#so... from here on out, penguin.data refers to penguin.data.csv, not penguin.csv
+# write new penguin data table to csv
+write.csv(penguin.data, "penguin.data.csv") 
 
-#merge the data
+
+# merge the data
 sst_working<-merge(sst_island, sst_residual)
-#harmonize naming conventions with the penguin data
+
+# harmonize naming conventions with the penguin data
 sst_working$Zone<-gsub("Tristan", "Other", sst_working$Zone)
 
-
-#### sort data by site, then by year, then by month
+# sort data by site, then by year, then by month
 SST<-SST[order(SST$Year, SST$Month),]
-  #may already be sorted this way, but probably good to have a command to explicitly do it in case data gets mixed up
-#####insert index variable here
+
+# may already be sorted this way, but probably good to have a command to explicitly do it in case data gets mixed up
+# insert index variable here
 SST$index<-1:length(SST$Year)
 
 SST_Gough = sst_working[which(sst_working$Zone=='Gough'),]
 SST_North= sst_working[which(sst_working$Zone=='Other'),]
 penguin.north$Zone <- gsub('Other', 'North',penguin.north$Zone)
-
-
-#create a data set with only october ssts
-sst_metrics<-sst_working[which(sst_working$Month==10),]
-sst_metrics$Month<-NULL
-
-
 
 years_in_set<-unique(penguin.north$Year)
 lags<-1:17
@@ -127,18 +113,12 @@ sst_south_lags_residual = matrix(0,nrow=length(penguin.south$Year),ncol=length(l
 ## North Lags SST
 for (i in 1:length(penguin.north$Year)){
   year=penguin.north$Year[i]
-  #### create an empty data frame to put your calculations into 
-  #### should be something like year, lag, average, max, min in columns
+  # create an empty data frame to put your calculations into 
+  # should be something like year, lag, average, max, min in columns
   indexline<-SST[(SST$Year==year) & (SST$Month==10),]
   indexno<-as.numeric(indexline$index[1])
   for (j in 1:length(lags)){
-    
     sst_data<-SST[which(SST$index<indexno+1 & SST$index>indexno-j),] # This subsets the SST for lags, really only 16 is important
-    
-    
-    ####then use this index to subset the data by j
-    #### then perform the calculation to get the average, max and min for j
-    ####then add these values to the data frame, with a label for year
   }
   # This snippet takes all 16 lags (column) and slaps it into a row representing the lags for each sample...total length 641 for North
   # The values in the 1st column are the sst for 16 months before egg, 2nd column is 15 before, etc....
@@ -178,11 +158,6 @@ for (i in 1:length(penguin.south$Year)){
   for (j in 1:length(lags)){
     
     sst_data<-SST[which(SST$index<indexno+1 & SST$index>indexno-j),] # This subsets the SST for lags, really only 16 is important
-    
-    
-    ####then use this index to subset the data by j
-    #### then perform the calculation to get the average, max and min for j
-    ####then add these values to the data frame, with a label for year
   }
   # This snippet takes all 16 lags (column) and slaps it into a row representing the lags for each sample...total length 641 for North
   # The values in the 1st column are the sst for 16 months before egg, 2nd column is 15 before, etc....
@@ -200,11 +175,6 @@ for (i in 1:length(penguin.south$Year)){
   for (j in 1:length(lags)){
     
     sst_data<-SST[which(SST$index<indexno+1 & SST$index>indexno-j),] # This subsets the SST for lags, really only 16 is important
-    
-    
-    ####then use this index to subset the data by j
-    #### then perform the calculation to get the average, max and min for j
-    ####then add these values to the data frame, with a label for year
   }
   # This snippet takes all 16 lags (column) and slaps it into a row representing the lags for each sample...total length 641 for North
   # The values in the 1st column are the sst for 16 months before egg, 2nd column is 15 before, etc....
@@ -226,11 +196,10 @@ Final_South = cbind(penguin.south, sst_south_lags2)
 Final_North_Residuals = cbind(penguin.north, sst_north_lags_residual2)
 Final_South_Residuals = cbind(penguin.south, sst_south_lags_residual2)
 
-
 Final_All = rbind(Final_North, Final_South)
 Final_All_Residual = rbind(Final_North_Residuals, Final_South_Residuals)
 
-# Do calculations on the lags
+# Do calculations on the lags for SST data
 Final_All$avg2 = rowMeans(sst_lags_all[1:2])
 Final_All$avg3 = rowMeans(sst_lags_all[1:3])
 Final_All$avg4 = rowMeans(sst_lags_all[1:4])
@@ -243,7 +212,7 @@ Final_All$avg8_2 = rowMeans(sst_lags_all[9:16])
 Final_All$min = apply(sst_lags_all,1,min)
 Final_All$max = apply(sst_lags_all,1,max)
 
-# Do calculations on the lags
+# Do calculations on the lags SST Residuals
 Final_All_Residual$avg2 = rowMeans(Residual_lags_all[1:2])
 Final_All_Residual$avg3 = rowMeans(Residual_lags_all[1:3])
 Final_All_Residual$avg4 = rowMeans(Residual_lags_all[1:4])
@@ -255,8 +224,6 @@ Final_All_Residual$avg8_2 = rowMeans(sst_lags_all[9:16])
 
 Final_All_Residual$min = apply(Residual_lags_all,1,min)
 Final_All_Residual$max = apply(Residual_lags_all,1,max)
-
-library(AICcmodavg)
 
 # Linear Models
 LM = list()
@@ -279,7 +246,7 @@ Modnames <- c("Month_1", "avg2", "avg3", "avg4", "min", "max","avg5_1","avg5_2",
 summary(LM[[3]])
 anova(LM[[3]])
 
-#we have weak eveidence for a differnt trend between the two zones, so let's look at them separately
+# we have weak eveidence for a differnt trend between the two zones, so let's look at them separately
 
 Final_All_Residual_North<-Final_All_Residual[which(Final_All_Residual$Zone=="North"),] 
 Final_All_Residual_South<-Final_All_Residual[which(Final_All_Residual$Zone!="North"),] 
@@ -288,237 +255,3 @@ North_SST_model = lm(Volume~Decision+avg3,data=Final_All_Residual_North)
 summary(North_SST_model)
 anova(North_SST_model)
 
-# Plots of Linear Model
-plot(Final_All_Residual$avg2,Final_All_Residual$Volume)
-abline(lm(Final_All_Residual$Volume~Final_All_Residual$avg4), col="red") # regression line (y~x)
-abline(lm(Final_All_Residual$Volume~Final_All_Residual$avg2), col="blue") # regression line (y~x)
-abline(lm(Final_All_Residual$Volume~Final_All_Residual$avg3), col="green") # regression line (y~x)
-
-
-lm(Final_All$Volume~Final_All$avg2)
-plot(Final_All$avg2,Final_All$Volume)
-
-# Add fit line
-abline(lm(Final_All$Volume~Final_All$avg2), col="red") # regression line (y~x)
-
-
-#Remake plots with Discriminant function data
-#Matts Experimental plots
-penguinPlot2 <- ggplot(penguin.data, aes(Year, Volume, color = Decision)) + 
-  geom_point(aes(fill = Decision), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-
-
-#Call Plot
-penguinPlot2
-
-#Regression, Find the Slope
-linearModel2 <- lm(Volume~Decision*Year, data = penguin.data)
-
-linearModel2
-
-summary(linearModel2)
-
-#Same plot as above, but for each hisland separately
-
-#tristan
-penguinPlot.Tristan2 <- ggplot(penguin.Tristan, aes(Year, Volume, color = Decision)) + 
-  geom_point(aes(fill = Decision), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Tristan2
-#Regression
-Tristan.linearModel2 <- lm(Volume~Decision*Year, data = penguin.Tristan)
-Tristan.linearModel2
-summary(Tristan.linearModel2)
-
-#Gough
-penguinPlot.Gough2 <- ggplot(penguin.Gough, aes(Year, Volume, color = Decision)) + 
-  geom_point(aes(fill = Decision), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Gough2
-#Regression
-Gough.linearModel2 <- lm(Volume~Decision*Year, data = penguin.Gough)
-Gough.linearModel2
-summary(Gough.linearModel2)
-
-#Inaccessible     inaccessible island only has U eggs
-penguinPlot.Inaccessible2 <- ggplot(penguin.Inaccessible, aes(Year, Volume, color = Decision)) + 
-  geom_point(aes(fill = Decision), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Inaccessible2
-#Regression
-Inaccessible.linearModel2 <- lm(Volume~Decision*Year, data = penguin.Inaccessible)
-Inaccessible.linearModel2
-summary(Inaccessible.linearModel2)
-
-
-
-#nightingale  
-penguinPlot.Nightingale2 <- ggplot(penguin.Nightingale, aes(Year, Volume, color = Decision)) + 
-  geom_point(aes(fill = Decision), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Nightingale2
-#Regression
-Nightingale.linearModel2 <- lm(Volume~Decision*Year, data = penguin.Inaccessible)
-Nightingale.linearModel2
-summary(Nightingale.linearModel2)
-
-
-#by climate zone
-
-#North
-penguinPlotnorth <- ggplot(penguin.north, aes(Year, Volume, color = Decision)) + 
-  geom_point(aes(fill = Decision), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-
-#Call Plot
-penguinPlotnorth
-
-#Regression, Find the Slope
-linearModelnorth <- lm(Volume~Decision*Year, data = penguin.north)
-
-linearModelnorth
-
-summary(linearModelnorth)
-
-
-#South
-
-penguinPlotsouth <- ggplot(penguin.south, aes(Year, Volume, color = Decision)) + 
-  geom_point(aes(fill = Decision), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-
-#Call Plot
-penguinPlotsouth
-
-#Regression, Find the Slope
-linearModelsouth <- lm(Volume~Decision*Year, data = penguin.south)
-
-linearModelsouth
-
-summary(linearModelsouth)
-
-
-
-#Things to do next: some of the linear models from above that'll be affected by the discriminant change
-
-
-penguin.A=penguin.data[penguin.data$Decision=="A",]
-penguin.B=penguin.data[penguin.data$Decision=="B",]
-
-
-penguin2A = aov(Volume~Location2 , data=penguin.A)
-anova(penguin2A)
-TukeyHSD(penguin2A, "Location", ordered=FALSE)
-
-penguin2B = aov(Volume~Location2 , data=penguin.B)
-anova(penguin2B)
-TukeyHSD(penguin2B, "Location", ordered=FALSE)
-
-
-#linear model of A eggs or B eggs by climate zone
-penguin.Zone.A.lm = aov(Volume~Zone, data=penguin.A)
-anova(penguin.Zone.A.lm)
-
-penguin.Zone.B.lm = aov(Volume~Zone, data=penguin.B)
-anova(penguin.Zone.B.lm)
-
-
-
-#plot the A eggs and B eggs north and south separated on the same graph
-shape1 <- c(21, 22)
-
-#Matts Experimental plots
-penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = Decision, shape = as.factor(Zone))) + 
-  geom_point(aes(fill = Decision, size = 4)) +
-  scale_shape_manual(values = shape1) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', aes(linetype = Zone), size = 2, fullrange = TRUE) + 
-  scale_linetype_manual(values = c(1, 2)) +
-  theme_bw()
-
-
-#Call Plot
-penguinPlot
-
-# Plot Year and Length
-plot(penguin.data$Length~penguin.data$Year)
-
-
-qplot(Year,Volume, data=penguin.a)
-qplot(Year,Volume, data=penguin.b)
-qplot(Year,Volume, data=penguin.u)
-qplot(Year,Volume, data=penguin.Tristan)
-
-#tristan
-penguinPlot.Tristan <- ggplot(penguin.Tristan, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Tristan
-#Regression
-Tristan.linearModel <- lm(Volume~AorB*Year, data = penguin.Tristan)
-Tristan.linearModel
-summary(Tristan.linearModel)
-
-#Gough
-penguinPlot.Gough <- ggplot(penguin.Gough, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Gough
-#Regression
-Gough.linearModel <- lm(Volume~AorB*Year, data = penguin.Gough)
-Gough.linearModel
-summary(Gough.linearModel)
-
-#Inaccessible     inaccessible island only has U eggs
-penguinPlot.Inaccessible <- ggplot(penguin.Inaccessible, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Inaccessible
-#Regression
-Inaccessible.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
-Inaccessible.linearModel
-summary(Inaccessible.linearModel)
-#inaccessible island only has U eggs
-
-
-#nightingale   nightingale island only differentiated between a and b eggs in 2014
-penguinPlot.Nightingale <- ggplot(penguin.Nightingale, aes(Year, Volume, color = AorB)) + 
-  geom_point(aes(fill = AorB), pch = 21) +
-  scale_fill_manual(values = c('red', 'green', 'blue')) +
-  geom_smooth(method = 'lm', size = 2, fullrange = TRUE) + 
-  theme_bw()
-#Call
-penguinPlot.Nightingale
-#Regression
-Nightingale.linearModel <- lm(Volume~AorB*Year, data = penguin.Inaccessible)
-Nightingale.linearModel
-summary(Nightingale.linearModel)
-#nightingale island only differentiated between a and b eggs in 2014
