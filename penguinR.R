@@ -43,6 +43,16 @@ penguin.Tristan=penguin.data[penguin.data$Location=="Tristan",]
 penguin.Gough=penguin.data[penguin.data$Location=="Gough",]
 penguin.Inaccessible=penguin.data[penguin.data$Location=="Inaccessible",]
 
+#subset by climate zone
+penguin.north=penguin.data[penguin.data$Zone=="Other",]
+penguin.south=penguin.data[penguin.data$Zone=="Gough",]
+
+#subset A or B egg for each climate zone
+penguin.north.A=penguin.data[penguin.A$Zone=="Other",]
+penguin.south.A=penguin.data[penguin.A$Zone=="Gough",]
+
+penguin.north.B=penguin.data[penguin.B$Zone=="Other",]
+penguin.south.B=penguin.data[penguin.B$Zone=="Gough",]
 
 #subset a or b egg for each island
 penguin.Nightingale.a=penguin.data[penguin.a$Location2=="Nightingale",]
@@ -51,11 +61,8 @@ penguin.Gough.a=penguin.data[penguin.a$Location=="Gough",]
 penguin.Inaccessible.a=penguin.data[penguin.a$Location=="Inaccessible",]
 
 
-#Subset by years
-
 #cutting out all of the years with a single specimen
 penguin.n1<-read.csv("penguin.n1.csv")
-#cutting out all of the years where there's only one island with specimens
 
 
 #cut out years before 2002
@@ -596,20 +603,8 @@ penguin.Gough.A=penguin.data[penguin.A$Location=="Gough",]
 penguin.Inaccessible.A=penguin.data[penguin.A$Location=="Inaccessible",]
 
 
-#subset by climate zone
-penguin.north=penguin.data[penguin.data$Zone=="Other",]
-penguin.south=penguin.data[penguin.data$Zone=="Gough",]
-
-#subset A or B egg for each climate zone
-penguin.north.A=penguin.data[penguin.A$Zone=="Other",]
-penguin.south.A=penguin.data[penguin.A$Zone=="Gough",]
-
-
-penguin.north.B=penguin.data[penguin.B$Zone=="Other",]
-penguin.south.B=penguin.data[penguin.B$Zone=="Gough",]
 
 #linear model of A eggs or B eggs by climate zone
-
 penguin.Zone.A.lm = aov(Volume~Zone, data=penguin.A)
 anova(penguin.Zone.A.lm)
 
@@ -634,7 +629,5 @@ penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = Decision, shape = 
 #Call Plot
 penguinPlot
 
-#goals
-#plot correlation between SST and egg size
 
 
