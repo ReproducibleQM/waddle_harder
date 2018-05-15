@@ -412,7 +412,7 @@ Final_All_Residual$avg8_2 = rowMeans(sst_lags_all[9:16])
 Final_All_Residual$min = apply(Residual_lags_all,1,min)
 Final_All_Residual$max = apply(Residual_lags_all,1,max)
 
-
+library(AICcmodavg)
 
 # Linear Models
 LM = list()
@@ -637,59 +637,4 @@ penguinPlot
 #goals
 #plot correlation between SST and egg size
 
-#packages waterworld loaded prior to running AIC models...
-library(AICcmodavg)
-library(car)
-library(nlme)
-library(doBy)
-library(reshape2)
-library(vegan)
-library(lmtest)
-library(raster)
-library(rgdal)
-library(dismo)
-library(rjava)
-library(maptools)
-library(ROCR)
-library(randomForest)
-library(mgcv)
-library(maps)
-library(sp)
-library(SDMTools)
-library(rgeos)
-library(gbm)
-library(boot)
-library(tigris)
-library(devtools)
-library(broom)
-library(rworldmap)
-library(plyr)
-library(ggplot2)
-library(ggmap)
-library(leaflet)
-library(acs)
-library(spatial.tools)
-library(data.table)
 
-
-#AICc gives you the residual variation, and you choose the candidate model that gives the lowest residual variation. 
-
-#use dataset vbsc to determine the best predictor for 
-
-#Create linear models to assess independent variables effect on dependent variables.... land use on concentrations
-
-
-#AIC models to try out
-
-Cand.models <- list()
-Cand.models[[1]] <- lm(log(NH4+1)~I(PAGT^2)+PAGT, data=vbsc, na.action="na.omit")
-Cand.models[[2]] <- lm(log(NH4+1)~I(PFOR^2)+PFOR, data=vbsc, na.action="na.omit")
-Cand.models[[3]] <- lm(log(NH4+1)~I(PURB^2)+PURB, data=vbsc, na.action="na.omit")
-Cand.models[[4]] <- lm(log(NH4+1)~PAGT, data=vbsc, na.action="na.omit")
-Modnames <- c("%Agrculture", "%Forest", "%Urban", "%Ag-linear")
-
-(aict <- aictab(cand.set = Cand.models, modnames=Modnames, sort=TRUE))
-
-summary(Cand.models[[1]])
-
-###the lower the AIC value, the better!
