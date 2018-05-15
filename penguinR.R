@@ -12,7 +12,7 @@ library(plyr)
 library(lme4)
 library(doBy)
 library(reshape2)
-library(AICmodavg)
+library(AICcmodavg)
 library(vegan)
 
 
@@ -25,14 +25,6 @@ summary(penguin.data)
 
 #to get rid of na
 #penguin<-subset(penguin.data,!is.na(penguin.data$))
-
-
-#subset by egg size
-penguin.a=penguin.data[penguin.data$A.or.B.egg=="A",]
-penguin.b=penguin.data[penguin.data$A.or.B.egg=="B",]
-penguin.u=penguin.data[penguin.data$A.or.B.egg=="U",]
-penguin.no.u=penguin.data[penguin.data$A.or.B.egg!="U",]
-
 
 #subset by location
 #Nightingale and Alex grouped together
@@ -55,6 +47,11 @@ penguin.north=penguin.data[penguin.data$Zone=="Other",]
 penguin.south=penguin.data[penguin.data$Zone=="Gough",]
 
 #subset A or B egg for each climate zone
+#subset by egg size
+penguin.A=penguin.data[penguin.data$A.or.B.egg=="A",]
+penguin.B=penguin.data[penguin.data$A.or.B.egg=="B",]
+penguin.u=penguin.data[penguin.data$A.or.B.egg=="U",]
+
 penguin.north.A=penguin.data[penguin.A$Zone=="Other",]
 penguin.south.A=penguin.data[penguin.A$Zone=="Gough",]
 
