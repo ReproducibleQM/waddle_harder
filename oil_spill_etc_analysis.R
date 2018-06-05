@@ -37,9 +37,20 @@ library(plyr)
 
 summary.penguin.oilspill<-ddply(penguin1, c("Zone", "Decision", "oilspill"), summarise,
                                 mean.Volume=mean(Volume), N=length(Volume), SE=sd(Volume)/sqrt(N))
+summary.penguin.oilspill$all.lines<-with(summary.penguin.oilspill, interaction(Zone,  Decision))
+
 
 #insert plot here
-
+library(ggplot2)
+oil.plot<-ggplot(summary.penguin.oilspill, aes(oilspill, mean.Volume, 
+                                               group=Zone, shape=Zone, fill=Decision))+
+  scale_fill_manual(values=c("blue", "orange"), name="Egg type")+
+  scale_shape_manual(values=c(21,24))+
+  geom_line(aes(group=all.lines), color="black")+
+  geom_errorbar(aes(ymin=(mean.Volume-SE), ymax=(mean.Volume+SE)), width=0.05, color="black")+
+  geom_point(color="black", size=4)+
+    theme_bw()
+oil.plot
 
 # now we want to examine the finer scale patterns in variation of egg size.
 #instead of lumping by time period and island group, we'll just break it out so that readers can see the patterns
