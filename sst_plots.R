@@ -1,4 +1,5 @@
 # SST plots
+# RUN penguinR.R FIRST!!
 
 library(zoo)
 library(ggplot2)
@@ -9,7 +10,7 @@ cma_gough = rollmean(SST$Gough,12,na.pad=TRUE)
 
 
 #plot away!
-plot(SST$index,cma_tristan,type = 'l',col='red',lwd='2',ylim = c(11,17),width=5,height=2)
+plot(SST$index,cma_tristan,type = 'l',col='red',lwd='2',ylim = c(11,17),width=5,height=2, xlab = 'Years', ylab = 'temperature (deg C)')
 lines(SST$index,cma_gough,col = 'blue',lwd='2')
 
 
@@ -23,8 +24,6 @@ goughlm = lm(cma_gough~SST$index)
 abline(tristanlm,col = 'black',lwd = '3')
 abline(goughlm,col='black',lwd='3')
 
-
-# For loop for center moving average for sst
-# for (loop in 1:nrow(SST)-12){
-#   new_dat[,1]= mean(SST$Tristan[loop:(loop+11)]
-# }
+#add a legend
+legend(1,17,legend=c("Tristan (North Islands)", "Gough (South Island)"),
+       col=c("red", "blue"), lty=1, cex=1)
