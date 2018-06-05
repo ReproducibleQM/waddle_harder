@@ -10,7 +10,8 @@ cma_gough = rollmean(SST$Gough,12,na.pad=TRUE)
 
 
 #plot away!
-plot(SST$index,cma_tristan,type = 'l',col='red',lwd='2',ylim = c(11,17),width=5,height=2, xlab = 'Years', ylab = 'temperature (deg C)')
+xaxes = SST$Year
+plot(cma_tristan,type = 'l',col='red',lwd='2',ylim = c(11,17), width=5,height=2, xlab = 'Years', ylab = 'temperature (deg C)')
 lines(SST$index,cma_gough,col = 'blue',lwd='2')
 
 
