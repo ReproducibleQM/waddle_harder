@@ -14,7 +14,7 @@ penguinPlot2 <- ggplot(penguin.data, aes(Year, Volume, color = Decision)) +
 penguinPlot2
 
 #Regression, Find the Slope
-linearModel2 <- lm(Volume~Decision*Year, data = penguin.data)
+linearModel <- lm(Tristan, data = SST.Tristan)
 
 linearModel2
 
@@ -155,11 +155,20 @@ penguinPlot <- ggplot(penguin.data, aes(Year, Volume, color = Decision, shape = 
   theme_bw()
 
 
-#Call Plot
-penguinPlot
+
+lm(SST$Tristan~SST$Year)
+abline(lm(SST$Tristan~SST$Year))
+
+sma(SST$Tristan$Year, h=12, silent=FALSE)
+
+
+cma = rollmean(SST$Tristan, 12,na.pad = TRUE)
+plot(cma)
+
+
 
 # Plot Year and Length
-plot(penguin.data$Length~penguin.data$Year)
+plot(SST$Tristan~SST$Year)
 
 
 qplot(Year,Volume, data=penguin.a)
