@@ -57,6 +57,11 @@ oil.plot<-ggplot(summary.penguin.oilspill, aes(oilspill, mean.Volume,
   labs(y=expression("Mean egg volume, "~cm^3), x="Oil Spill")
 
 oil.plot
+#save to pdf
+pdf("figs/oilspillplot.pdf", height=5, width=7)
+oil.plot
+dev.off()
+
 
 # now we want to examine the finer scale patterns in variation of egg size.
 #instead of lumping by time period and island group, we'll just break it out so that readers can see the patterns
@@ -97,3 +102,8 @@ year.plot<-ggplot(summary.penguin.year, aes(as.factor(Year), mean.Volume,
   labs(y=expression("Mean egg volume, "~cm^3), x="Year")
 
 year.plot
+
+#save to pdf
+pdf("figs/recentyearsplot.pdf", height=5, width=7)
+year.plot
+dev.off()
