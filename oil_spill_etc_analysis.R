@@ -39,17 +39,23 @@ summary.penguin.oilspill<-ddply(penguin1, c("Zone", "Decision", "oilspill"), sum
                                 mean.Volume=mean(Volume), N=length(Volume), SE=sd(Volume)/sqrt(N))
 summary.penguin.oilspill$all.lines<-with(summary.penguin.oilspill, interaction(Zone,  Decision))
 
+#reorder factor levels for oilspill
+summary.penguin.oilspill$oilspill<-factor(summary.penguin.oilspill$oilspill, levels=c("Before", "After"))
+
 
 #insert plot here
 library(ggplot2)
 oil.plot<-ggplot(summary.penguin.oilspill, aes(oilspill, mean.Volume, 
-                                               group=Zone, shape=Zone, fill=Decision))+
-  scale_fill_manual(values=c("blue", "orange"), name="Egg type")+
-  scale_shape_manual(values=c(21,24))+
+                                               shape=Zone, fill=Decision))+
+  scale_fill_manual(values=c("blue", "orange"), name="Egg type", 
+                    guide=guide_legend(override.aes=aes(shape=21)))+
+  scale_shape_manual(values=c(21,24), labels=c("North", "South"))+
   geom_line(aes(group=all.lines), color="black")+
   geom_errorbar(aes(ymin=(mean.Volume-SE), ymax=(mean.Volume+SE)), width=0.05, color="black")+
   geom_point(color="black", size=4)+
-    theme_bw()
+  theme_bw()+
+  labs(y=expression("Mean egg volume, "~cm^3), x="Oil Spill")
+
 oil.plot
 
 # now we want to examine the finer scale patterns in variation of egg size.
@@ -76,3 +82,18 @@ shapiro.test(resid(year.model))
 
 summary.penguin.year<-ddply(penguin1, c("Location2", "Decision", "Year"), summarise,
                                 mean.Volume=mean(Volume), N=length(Volume), SE=sd(Volume)/sqrt(N))
+
+summary.penguin.year$all.lines<-with(summary.penguin.year, interaction(Location2,  Decision))
+
+year.plot<-ggplot(summary.penguin.year, aes(as.factor(Year), mean.Volume, 
+                                               shape=Location2, fill=Decision))+
+  scale_fill_manual(values=c("blue", "orange"), name="Egg type", 
+                    guide=guide_legend(override.aes=aes(shape=21), order=1))+
+  scale_shape_manual(values=c(21,22,24), name="Island", labels=c("Gough", "Nightingale", "Tristan"))+
+  geom_line(aes(group=all.lines), color="black")+
+  geom_errorbar(aes(ymin=(mean.Volume-SE), ymax=(mean.Volume+SE)), width=0.05, color="black")+
+  geom_point(color="black", size=4)+
+  theme_bw()+
+  labs(y=expression("Mean egg volume, "~cm^3), x="Year")
+
+year.plot
