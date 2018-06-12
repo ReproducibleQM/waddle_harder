@@ -27,16 +27,17 @@ a <- ggplot(smallerworld) +
   geom_path(data = smallerworld, aes(x, y), colour = "black", fill = "white") +
   geom_rect(data = insetrect, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), alpha = 0, colour = "blue", size = 1, linetype = 1) +
   theme(axis.ticks = element_blank(), axis.text.x = element_blank(),axis.text.y = element_blank()) +
-  #labs(x = '', y = '')
+  labs(x = '', y = '')
 
-b <- ggplot(TristanGoughSmall, aes(lon, lat)) +
+b <- ggplot(TristanGoughSmall) +
   theme_bw(base_size = 22) +
   geom_path(data = TristanGoughSmall, aes(x, y), colour = "black", fill = "white") +
-  #geom_path(data = shapefile_df, aes(x = long, y = lat, group = group),color = 'black', fill = 'green', size = 1)+
+  geom_path(data = shapefile_df, aes(x = long, y = lat, group = group),color = 'black', fill = 'white', size = 1)+
   annotate("text", x = -12, y = -37.1, label = "Tristan")+
   annotate("text", x = -10, y = -40, label = "Gough")+
   annotate("text", x = -12.7, y = -37.1, label = "Inaccessbile")+
   annotate("text", x = -12.5, y = -37.6, label = "Nightengale")
+  labs(x = 'lon', y = 'lat')
 
   
 grid.newpage()
