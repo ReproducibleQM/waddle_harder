@@ -36,7 +36,7 @@ shapiro.test(resid(oil.model))
 library(plyr)
 
 summary.penguin.oilspill<-ddply(penguin1, c("Zone", "Decision", "oilspill"), summarise,
-                                mean.Volume=mean(Volume), N=length(Volume), SE=sd(Volume)/sqrt(N))
+                                mean.Volume=mean(Volume), N=length(Volume), SE=sd(Volume))
 summary.penguin.oilspill$all.lines<-with(summary.penguin.oilspill, interaction(Zone,  Decision))
 
 #reorder factor levels for oilspill
@@ -46,13 +46,15 @@ summary.penguin.oilspill$oilspill<-factor(summary.penguin.oilspill$oilspill, lev
 #insert plot here
 library(ggplot2)
 oil.plot<-ggplot(summary.penguin.oilspill, aes(oilspill, mean.Volume, 
-                                               shape=Zone, fill=Decision))+
+                                               shape=Zone, fill=Decision, label=N))+
   scale_fill_manual(values=c("blue", "orange"), name="Egg type", 
                     guide=guide_legend(override.aes=aes(shape=21)))+
   scale_shape_manual(values=c(21,24), labels=c("North", "South"))+
-  geom_line(aes(group=all.lines), color="black")+
-  geom_errorbar(aes(ymin=(mean.Volume-SE), ymax=(mean.Volume+SE)), width=0.05, color="black")+
-  geom_point(color="black", size=4)+
+  geom_line(aes(group=all.lines), color="black", position=position_dodge(width=0.3))+
+  geom_errorbar(aes(ymin=(mean.Volume-SE), ymax=(mean.Volume+SE)), width=0.05, color="black",
+                position=position_dodge(width=0.3))+
+  geom_point(color="black", size=4, position=position_dodge(width=0.3))+
+  geom_text(aes(label=N),hjust=1.4, vjust=-1.2, position=position_dodge(width=0.3))+
   theme_bw()+
   labs(y=expression("Mean egg volume, "~cm^3), x="Oil Spill")
 
@@ -86,18 +88,20 @@ shapiro.test(resid(year.model))
 
 
 summary.penguin.year<-ddply(penguin1, c("Location2", "Decision", "Year"), summarise,
-                                mean.Volume=mean(Volume), N=length(Volume), SE=sd(Volume)/sqrt(N))
+                                mean.Volume=mean(Volume), N=length(Volume), SE=sd(Volume))
 
 summary.penguin.year$all.lines<-with(summary.penguin.year, interaction(Location2,  Decision))
 
 year.plot<-ggplot(summary.penguin.year, aes(as.factor(Year), mean.Volume, 
-                                               shape=Location2, fill=Decision))+
+                                               shape=Location2, fill=Decision, label=N))+
   scale_fill_manual(values=c("blue", "orange"), name="Egg type", 
                     guide=guide_legend(override.aes=aes(shape=21), order=1))+
   scale_shape_manual(values=c(21,22,24), name="Island", labels=c("Gough", "Nightingale", "Tristan"))+
-  geom_line(aes(group=all.lines), color="black")+
-  geom_errorbar(aes(ymin=(mean.Volume-SE), ymax=(mean.Volume+SE)), width=0.05, color="black")+
-  geom_point(color="black", size=4)+
+  geom_line(aes(group=all.lines), color="black",  position=position_dodge(width=0.2))+
+  geom_errorbar(aes(ymin=(mean.Volume-SE), ymax=(mean.Volume+SE)), width=0.05, color="black",
+                position=position_dodge(width=0.2))+
+  geom_point(color="black", size=4,  position=position_dodge(width=0.2))+
+  geom_text(aes(label=N),hjust=1.7, vjust=-0.3,  position=position_dodge(width=0.2))+
   theme_bw()+
   labs(y=expression("Mean egg volume, "~cm^3), x="Year")
 
