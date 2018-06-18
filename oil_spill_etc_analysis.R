@@ -37,7 +37,7 @@ library(plyr)
 
 summary.penguin.oilspill<-ddply(penguin1, c("Zone", "Decision", "oilspill"), summarise,
                                 mean.Volume=mean(Volume), N=length(Volume), SE=sd(Volume))
-summary.penguin.oilspill$all.lines<-with(summary.penguin.oilspill, interaction(Zone,  Decision))
+summary.penguin.oilspill$all.lines<-with(summary.penguin.oilspill, interaction(Decision, Zone))
 
 #reorder factor levels for oilspill
 summary.penguin.oilspill$oilspill<-factor(summary.penguin.oilspill$oilspill, levels=c("Before", "After"))
