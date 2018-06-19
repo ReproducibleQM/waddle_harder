@@ -92,11 +92,12 @@ summary.penguin.year<-ddply(penguin1, c("Location2", "Decision", "Year"), summar
 
 summary.penguin.year$all.lines<-with(summary.penguin.year, interaction(Location2,  Decision))
 
+
 year.plot<-ggplot(summary.penguin.year, aes(as.factor(Year), mean.Volume, 
                                                shape=Location2, fill=Decision, label=N))+
   scale_fill_manual(values=c("blue", "orange"), name="Egg type", 
                     guide=guide_legend(override.aes=aes(shape=21), order=1))+
-  scale_shape_manual(values=c(21,22,24), name="Island", labels=c("Gough", "Nightingale", "Tristan"))+
+  scale_shape_manual(values=c(24,22,21), name="Island", labels=c("Gough", "Nightingale", "Tristan"))+
   geom_line(aes(group=all.lines), color="black",  position=position_dodge(width=0.2))+
   geom_errorbar(aes(ymin=(mean.Volume-SE), ymax=(mean.Volume+SE)), width=0.05, color="black",
                 position=position_dodge(width=0.2))+
