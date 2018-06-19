@@ -31,18 +31,24 @@ a <- ggplot(smallerworld) +
 
 b <- ggplot(TristanGoughSmall) +
   theme_bw(base_size = 22) +
-  geom_path(data = TristanGoughSmall, aes(x, y), colour = "black", fill = "white") +
-  geom_path(data = shapefile_df, aes(x = long, y = lat, group = group),color = 'black', fill = 'white', size = 1)+
+  geom_path(data = TristanGoughSmall, aes(x, y), colour = "green", fill = "white") +
+  geom_polygon(data = shapefile_df, aes(x = long, y = lat, group = group),colour = 'black', fill = 'white', size = 1)+
   annotate("text", x = -12, y = -37.1, label = "Tristan")+
-  annotate("text", x = -10, y = -40, label = "Gough")+
-  annotate("text", x = -12.7, y = -37.1, label = "Inaccessbile")+
-  annotate("text", x = -12.5, y = -37.6, label = "Nightengale")
-  labs(x = 'lon', y = 'lat')
+  annotate("text", x = -9.8, y = -40.1, label = "Gough")+
+  annotate("text", x = -13, y = -37.2, label = "Inaccessbile")+
+  annotate("text", x = -12.25, y = -37.5, label = "Nightengale")+
+  labs(x = 'lon', y = 'lat')+
+  xlim(-13.5,-9)
 
+#Read in sst csv so that we can find the domain average
+
+sstdat <- read.csv(file="c:/TheDataIWantToReadIn.csv", header=TRUE, sep=",")
   
 grid.newpage()
 
 vpb_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)  # the larger map
 vpa_ <- viewport(width = 0.4, height = 0.4, x = 0.8, y = 0.8)  # the inset in upper right
+vpc_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5) # adding the sst data
 print(b, vp = vpb_)
 print(a, vp = vpa_)
+print(a, vp = vpc_)
