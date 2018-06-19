@@ -4,6 +4,12 @@
 library(zoo)
 library(ggplot2)
 
+# loading the data
+SST<-read.csv(file="SST_TG.csv", header=T)
+View(SST)
+
+
+
 #12 month rolling mean
 cma_tristan = rollmean(SST$Tristan,12,na.pad=TRUE)
 cma_gough = rollmean(SST$Gough,12,na.pad=TRUE)
@@ -40,3 +46,23 @@ p + scale_x_date(limits = c(min, max))
 # #add a legend
 # legend(1,17,legend=c("Tristan (North Islands)", "Gough (South Island)"),
 #        col=c("red", "blue"), lty=1, cex=1)
+
+
+
+## working on a timeseries of sst data
+ggplot(data=SST, aes(x=Year, y=Tristan, group=1)) +
+  geom_line()
+
+
+
+ggplot(data=SST, aes(x=Year, y=Gough, group=1)) +
+  geom_line()
+
+
+## working on boxplots of penguin egg sizes
+final.b=Final_All[Final_All$Decision=="B",]
+
+bp <- ggplot(final.b, aes(x=Zone, y=Volume)) + geom_boxplot()
+bp
+
+#need to make these pretty and overlay them on top of one another...
