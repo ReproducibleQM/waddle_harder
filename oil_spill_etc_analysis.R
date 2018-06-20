@@ -74,10 +74,13 @@ dev.off()
 #and because we want to look at a year effect, and we want to see if there's anything going on
 #relative to time, but there's not a ton of data so we'll just need to look at years directly and ANOVA them
 
+#bring back the pre-1970 data
+penguin2<-penguin[which(penguin$Decision != "U" &
+                          penguin$Volume<130),]
 
 #we're interested in change with time in these two periods, and by island, but otherwise the analysis is 
 #very similar to the above
-year.model<-lm(Volume~Location2*as.factor(Year)*Decision, data=penguin1)
+year.model<-lm(Volume~Location2*as.factor(Year)*Decision, data=penguin2)
 
 summary(year.model)
 AIC(year.model)
@@ -87,17 +90,21 @@ TukeyHSD(aov(year.model))
 shapiro.test(resid(year.model))
 
 
-summary.penguin.year<-ddply(penguin1, c("Location2", "Decision", "Year"), summarise,
+summary.penguin.year<-ddply(penguin2, c("Location2", "Decision", "Year"), summarise,
                                 mean.Volume=mean(Volume), N=length(Volume), SE=sd(Volume))
 
-summary.penguin.year$all.lines<-with(summary.penguin.year, interaction(Location2,  Decision))
 
+#reorder factor levels for islands
+summary.penguin.year$Location2<-factor(summary.penguin.year$Location2, levels=c("Tristan", "Nightingale", "Inaccessible", "Gough"))
+
+#create interaction
+summary.penguin.year$all.lines<-with(summary.penguin.year, interaction(Location2,  Decision))
 
 year.plot<-ggplot(summary.penguin.year, aes(as.factor(Year), mean.Volume, 
                                                shape=Location2, fill=Decision, label=N))+
   scale_fill_manual(values=c("blue", "orange"), name="Egg type", 
                     guide=guide_legend(override.aes=aes(shape=21), order=1))+
-  scale_shape_manual(values=c(24,22,21), name="Island", labels=c("Gough", "Nightingale", "Tristan"))+
+  scale_shape_manual(values=c(23,22,21,24), name="Island", labels=c("Tristan", "Nightingale", "Inaccessible", "Gough"))+
   geom_line(aes(group=all.lines), color="black",  position=position_dodge(width=0.2))+
   geom_errorbar(aes(ymin=(mean.Volume-SE), ymax=(mean.Volume+SE)), width=0.05, color="black",
                 position=position_dodge(width=0.2))+
