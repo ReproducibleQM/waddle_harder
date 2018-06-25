@@ -36,7 +36,8 @@ shapiro.test(resid(oil.model))
 library(plyr)
 
 summary.penguin.oilspill<-ddply(penguin1, c("Zone", "Decision", "oilspill"), summarise,
-                                mean.Volume=mean(Volume), N=length(Volume), SE=sd(Volume))
+                                mean.Volume=mean(Volume), N=length(Volume), 
+                                SE=sd(Volume)/sqrt(N))
 summary.penguin.oilspill$all.lines<-with(summary.penguin.oilspill, interaction(Decision, Zone))
 
 #reorder factor levels for oilspill
@@ -75,8 +76,7 @@ dev.off()
 #relative to time, but there's not a ton of data so we'll just need to look at years directly and ANOVA them
 
 #bring back the pre-1970 data
-penguin2<-penguin[which(penguin$Decision != "U" &
-                          penguin$Volume<130),]
+penguin2<-penguin[which(penguin$Decision != "U"),]
 
 #we're interested in change with time in these two periods, and by island, but otherwise the analysis is 
 #very similar to the above
@@ -91,7 +91,7 @@ shapiro.test(resid(year.model))
 
 
 summary.penguin.year<-ddply(penguin2, c("Location2", "Decision", "Year"), summarise,
-                                mean.Volume=mean(Volume), N=length(Volume), SE=sd(Volume))
+                                mean.Volume=mean(Volume), N=length(Volume),  SE=sd(Volume)/sqrt(N))
 
 
 #reorder factor levels for islands
@@ -116,6 +116,68 @@ year.plot<-ggplot(summary.penguin.year, aes(as.factor(Year), mean.Volume,
 year.plot
 
 #save to pdf
-pdf("figs/recentyearsplot.pdf", height=5, width=7)
+pdf("figs/yearplot.pdf", height=5, width=7)
 year.plot
 dev.off()
+
+#now, let's do some correlation analyses to see how A and B eggs are correlated with each other by zone
+summary.penguin.zone<-ddply(penguin2, c("Zone", "Decision", "Year"), summarise,
+                            mean.Volume=mean(Volume), N=length(Volume),  SE=sd(Volume)/sqrt(N))
+
+#cut out years that there was only 1 egg of a given type collected
+summary.penguin.zone<-summary.penguin.zone[which(summary.penguin.zone$N>1),]
+
+# first let's split it up and then line the data back up together 
+
+A.eggs<-summary.penguin.zone[which(summary.penguin.zone$Decision=="A"),]
+
+B.eggs<-summary.penguin.zone[which(summary.penguin.zone$Decision=="B"),]
+
+#fiddle with it so we can remerge it all
+A.eggs$all.lines<-NULL
+B.eggs$all.lines<-NULL
+A.eggs$Decision<-NULL
+B.eggs$Decision<-NULL
+names(A.eggs)<-c("Zone","Year","A.mean.Volume", "A.N", "A.SE")
+names(B.eggs)<-c("Zone","Year","B.mean.Volume", "B.N", "B.SE")
+
+crosstab.eggs<-merge(A.eggs, B.eggs, by=c("Zone", "Year"))
+
+#reorder factor levels for islands
+crosstab.eggs$Zone<-factor(crosstab.eggs$Zone, levels=c("Other", "Gough"))
+
+#now let's do a correlation analysis
+
+cor.test(crosstab.eggs$B.mean.Volume, crosstab.eggs$A.mean.Volume, method="pearson")
+
+#not much there, but we might be able to see things a little better if we look at this by Zone
+
+egg.cor.lm<-lm(B.mean.Volume~A.mean.Volume*Zone, data=crosstab.eggs)
+summary(egg.cor.lm)
+
+#lets's also do variability
+
+egg.SE.lm<-lm(B.SE~A.SE*Zone, data=crosstab.eggs)
+summary(egg.SE.lm)
+
+#not a lot significant, but let's see what we can visualize
+
+eggcorr.plot<-ggplot(crosstab.eggs, aes(A.mean.Volume, B.mean.Volume, 
+                                            shape=Zone, fill=Zone, label=Year))+
+  scale_shape_manual(values=c(21,24), labels=c("North", "South"))+
+  scale_fill_manual(values=c("pink", "yellow"), name="Zone", labels=c("North", "South"))+
+  geom_smooth(method="lm", se=FALSE)+
+  geom_errorbar(aes(ymin=(B.mean.Volume-B.SE), ymax=(B.mean.Volume+B.SE)), width=0.05, color="black")+
+  geom_errorbarh(aes(xmin=(A.mean.Volume-A.SE), xmax=(A.mean.Volume+A.SE)), height=0.05, color="black")+
+  geom_point(color="black", size=4)+
+  geom_text(aes(label=Year),hjust=1.5, vjust=-0.3, size=3)+
+  theme_bw()+
+  labs(y=expression("Mean B egg volume, "~cm^3), x=expression("Mean A egg volume, "~cm^3))
+
+eggcorr.plot
+
+#save to pdf
+pdf("figs/AvsBvol.pdf", height=5, width=7)
+eggcorr.plot
+dev.off()
+
