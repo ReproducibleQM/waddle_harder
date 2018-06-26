@@ -46,6 +46,9 @@ summary.penguin.oilspill$oilspill<-factor(summary.penguin.oilspill$oilspill, lev
 
 #insert plot here
 library(ggplot2)
+library(ggrepel)
+
+
 oil.plot<-ggplot(summary.penguin.oilspill, aes(oilspill, mean.Volume, 
                                                shape=Zone, fill=Decision, label=N))+
   scale_fill_manual(values=c("blue", "orange"), name="Egg type", 
@@ -109,7 +112,7 @@ year.plot<-ggplot(summary.penguin.year, aes(as.factor(Year), mean.Volume,
   geom_errorbar(aes(ymin=(mean.Volume-SE), ymax=(mean.Volume+SE)), width=0.05, color="black",
                 position=position_dodge(width=0.2))+
   geom_point(color="black", size=4,  position=position_dodge(width=0.2))+
-  geom_text(aes(label=N),hjust=1.7, vjust=-0.3,  position=position_dodge(width=0.2))+
+  geom_text_repel(aes(label=N),hjust=1.7, vjust=-0.3,  position=position_dodge(width=0.2))+
   theme_bw()+
   labs(y=expression("Mean egg volume, "~cm^3), x="Year")
 
@@ -163,16 +166,17 @@ summary(egg.SE.lm)
 #not a lot significant, but let's see what we can visualize
 
 eggcorr.plot<-ggplot(crosstab.eggs, aes(A.mean.Volume, B.mean.Volume, 
-                                            shape=Zone, fill=Zone, label=Year))+
+                                            shape=Zone, fill=Zone, linetype=Zone, label=Year))+
   scale_shape_manual(values=c(21,24), labels=c("North", "South"))+
+  scale_linetype_manual(values=c("twodash", "dashed"), labels=c("North", "South"))+
   scale_fill_manual(values=c("pink", "yellow"), name="Zone", labels=c("North", "South"))+
-  geom_smooth(method="lm", se=FALSE)+
-  geom_errorbar(aes(ymin=(B.mean.Volume-B.SE), ymax=(B.mean.Volume+B.SE)), width=0.05, color="black")+
-  geom_errorbarh(aes(xmin=(A.mean.Volume-A.SE), xmax=(A.mean.Volume+A.SE)), height=0.05, color="black")+
+  geom_smooth(method="lm", se=FALSE, colour="grey")+
+  geom_errorbar(aes(ymin=(B.mean.Volume-B.SE), ymax=(B.mean.Volume+B.SE)), width=0.05, color="black", linetype="solid")+
+  geom_errorbarh(aes(xmin=(A.mean.Volume-A.SE), xmax=(A.mean.Volume+A.SE)), height=0.05, color="black", linetype="solid")+
   geom_point(color="black", size=4)+
-  geom_text(aes(label=Year),hjust=1.5, vjust=-0.3, size=3)+
+  geom_text_repel(aes(label=Year), size=3, nudge_y=1, nudge_x=2)+
   theme_bw()+
-  labs(y=expression("Mean B egg volume, "~cm^3), x=expression("Mean A egg volume, "~cm^3))
+  labs(y=expression("Mean B egg volume "~cm^3), x=expression("Mean A egg volume "~cm^3))
 
 eggcorr.plot
 
@@ -180,4 +184,19 @@ eggcorr.plot
 pdf("figs/AvsBvol.pdf", height=5, width=7)
 eggcorr.plot
 dev.off()
+
+eggvar.plot<-ggplot(crosstab.eggs, aes(A.SE, B.SE, 
+                                        shape=Zone, fill=Zone, label=Year))+
+  scale_shape_manual(values=c(21,24), labels=c("North", "South"))+
+  scale_fill_manual(values=c("pink", "yellow"), name="Zone", labels=c("North", "South"))+
+  geom_smooth(method="lm", se=FALSE)+
+  geom_point(color="black", size=4)+
+  geom_text_repel(aes(label=Year),hjust=1.5, vjust=-0.3, size=3)+
+  theme_bw()+
+  labs(y=expression("Mean B egg volume variation"~cm^3), x=expression("Mean A egg volume variation "~cm^3))
+
+eggvar.plot
+
+
+#not much there, so let's leave it alone.
 
