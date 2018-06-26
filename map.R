@@ -41,36 +41,60 @@ ptheme <- theme(panel.border = element_rect(colour = 'black', size = 2, linetype
 
 a <- ggplot(smallerworld) +
   theme_bw(base_size = 22) +
-  geom_path(data = smallerworld, aes(x, y), colour = "black", fill = "white") +
+  geom_path(data = smallerworld, aes(x, y), colour = "black") +
   geom_rect(data = insetrect, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), alpha = 0, colour = "blue", size = 1, linetype = 1) +
   theme(axis.ticks = element_blank(), axis.text.x = element_blank(),axis.text.y = element_blank()) +
   labs(x = '', y = '')
 
 
 
-mycol <- c("navy", "blue", "cyan", "lightcyan", "yellow", "red", "red4")
+#mycol <- c("navy", "blue", "cyan", "lightcyan", "yellow", "red", "red4")
 
 
 b <- ggplot(TristanGoughSmall) +
   theme_bw() +
   #geom_polygon(data = TristanGoughSmall, aes(x, y), colour = "green", fill = "white") +
-  geom_polygon(data = shapefile_df, aes(x = long, y = lat, group = group),colour = 'black', fill = 'black', size = 1)+
+  #geom_polygon(data = shapefile_df, aes(x = long, y = lat, group = group),colour = 'black', fill = 'black', size = 1)+
   annotate("text", x = -11.8, y = -37.1, label = "Tristan")+
-  annotate("text", x = -9.7, y = -40.1, label = "Gough")+
+  annotate("text", x = -9.6, y = -40.1, label = "Gough")+
   annotate("text", x = -13.1, y = -37, label = "Inaccessible")+
   annotate("text", x = -12.1, y = -37.6, label = "Nightingale")+
   labs(x = 'lon', y = 'lat')+
   xlim(-14,-8)+
   ylim(-42,-36)+
-  stat_contour(aes(x = long, y = lat, z = sst), data = sst_df, color = 'black', bins=5)+
+  
+
+# c <- ggplot(sst_df)+
+#   #aes(x = long, y = lat, z = sst)+
+#   geom_tile(aes(fill=z))+
+#   coord_equal()+
+#   stat_contour(aes(fill=..level..), geom='polygon', binwidth=0.005)+
+#   geom_contour(color='white',alpha=0.5)+
+#   scale_fill_distiller(palette='Spectral', na.value='white')+
+#   theme_bw()
+
+  stat_contour(aes(x = long, y = lat, z = sst, colour=..level..), data = sst_df, breaks = round(quantile(sst_df$sst,seq(10,20,1)),0), size=1)+
+
+  #color = 'black', bins=5)+
 
 
 grid.newpage()
 
 vpb_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)  # the larger map
+#vpc_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)
 vpa_ <- viewport(width = 0.4, height = 0.4, x = 0.8, y = 0.8)  # the inset in upper right
 
 print(b, vp = vpb_)
+#print(c, vp = vpc_)
 print(a, vp = vpa_)
 
+####troubloushoot
+# 
+# ggplot(data = sst_df, aes(x = long, y = lat, z = sst))+
+#   stat_contour(geom = 'polygon',aes(fill=..level..))+
+#   geom_tile(aes(fill=sst))+
+#   geom_raster(interpolate = TRUE)+
+#   scale_fill_gradientn(colours=rev(rainbow(7)))+
+#   stat_contour()
+  
 
