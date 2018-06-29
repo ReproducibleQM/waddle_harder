@@ -205,5 +205,31 @@ library(reshape2)
 unusual.summary<-count(penguin, c("Year", "Decision"))
 unusual.summary.crosstab<-dcast(unusual.summary,  Year ~ Decision, value.var = "freq", fun.aggregate = sum)
 
+unusual.maxmins<-ddply(penguin, "Year", summarize, 
+                       maxegg=max(Volume), minegg=min(Volume))
+unusual.eggs<-merge(unusual.summary.crosstab, unusual.maxmins)
+
 eggsperyear<-count(penguin, "Year")
 
+unusual.eggs.1<-merge(unusual.eggs, eggsperyear)
+
+unusual.eggs.1$perc.odd<-100*unusual.eggs.1$U/unusual.eggs.1$freq
+
+
+unusual.plot<-ggplot(unusual.eggs.1, aes(x=Year))+
+  geom_smooth(aes(y=perc.odd, linetype="percegg.line"), method="lm", se=FALSE, colour="black")+
+  geom_point(aes(y=perc.odd, color="percegg", fill="percegg.fill", shape="percegg.shape"), size=4, colour="black") +
+  #put the other measures on the secondary axis
+  geom_smooth(aes(y=maxegg/1.25, linetype="maxegg.line"), method="lm", se=FALSE, colour="black")+
+  geom_point(aes(y=maxegg/1.25, color="maxegg", fill="maxegg.fill", shape="maxegg.shape"), color="black", size=4)+
+  geom_smooth(aes(y=minegg/1.25, linetype="minegg.line"), method="lm", se=FALSE, colour="black")+
+  geom_point(aes(y=minegg/1.25, color="minegg", fill="minegg.fill", shape="minegg.shape"), color="black", size=4)+
+  scale_y_continuous(sec.axis=sec_axis(~.*1.25, name=expression("Egg volume "~cm^3)))+
+  scale_colour_manual(name="", values=c(maxegg="black", minegg="black", percegg="black"), labels=c("largest egg", "smallest egg", "% unusual"))+
+  scale_linetype_manual(name="", values=c(maxegg.line="dotdash", minegg.line="twodash",percegg.line="dashed"),labels=c("largest egg", "smallest egg", "% unusual"))+
+  scale_fill_manual(name="", values=c(maxegg.fill="orange", minegg.fill="blue", percegg.fill="pink"),labels=c("largest egg", "smallest egg", "% unusual"))+
+  scale_shape_manual(name="", values=c(maxegg.shape=22, minegg.shape=24, percegg.shape=21),labels=c("largest egg", "smallest egg", "% unusual"))+
+  theme_bw()+
+  labs(y="Proportion unclassified eggs ", x="Year")
+ 
+unusual.plot
