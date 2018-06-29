@@ -54,7 +54,7 @@ oil.plot<-ggplot(summary.penguin.oilspill, aes(oilspill, mean.Volume,
   scale_fill_manual(values=c("blue", "orange"), name="Egg type", 
                     guide=guide_legend(override.aes=aes(shape=21)))+
   scale_shape_manual(values=c(21,24), labels=c("North", "South"))+
-  geom_line(aes(group=all.lines), color="black", position=position_dodge(width=0.3))+
+  geom_line(aes(group=all.lines), color="grey", linetype="dashed", position=position_dodge(width=0.3))+
   geom_errorbar(aes(ymin=(mean.Volume-SE), ymax=(mean.Volume+SE)), width=0.05, color="black",
                 position=position_dodge(width=0.3))+
   geom_point(color="black", size=4, position=position_dodge(width=0.3))+
