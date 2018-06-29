@@ -166,15 +166,15 @@ summary(egg.SE.lm)
 #not a lot significant, but let's see what we can visualize
 
 eggcorr.plot<-ggplot(crosstab.eggs, aes(A.mean.Volume, B.mean.Volume, 
-                                            shape=Zone, fill=Zone, linetype=Zone, label=Year))+
-  scale_shape_manual(values=c(21,24), labels=c("North", "South"))+
-  scale_linetype_manual(values=c("twodash", "dashed"), labels=c("North", "South"))+
-  scale_fill_manual(values=c("pink", "yellow"), name="Zone", labels=c("North", "South"))+
-  geom_smooth(method="lm", se=FALSE, colour="grey")+
+                                            label=Year))+
+  geom_smooth(aes(A.mean.Volume, B.mean.Volume),method="lm", se=FALSE, colour="grey", linetype="dashed")+
   geom_errorbar(aes(ymin=(B.mean.Volume-B.SE), ymax=(B.mean.Volume+B.SE)), width=0.05, color="black", linetype="solid")+
   geom_errorbarh(aes(xmin=(A.mean.Volume-A.SE), xmax=(A.mean.Volume+A.SE)), height=0.05, color="black", linetype="solid")+
-  geom_point(color="black", size=4)+
+  geom_point(aes(shape=Zone, fill=Zone), color="black", size=4)+
   geom_text_repel(aes(label=Year), size=3, nudge_y=1, nudge_x=2)+
+  scale_shape_manual(values=c(21,24), name="Zone", labels=c("North", "South"))+
+  scale_fill_manual(values=c("pink", "yellow"), name="Zone", labels=c("North", "South"))+
+  guides(linetype="none")+
   theme_bw()+
   labs(y=expression("Mean B egg volume "~cm^3), x=expression("Mean A egg volume "~cm^3))
 
@@ -215,21 +215,40 @@ unusual.eggs.1<-merge(unusual.eggs, eggsperyear)
 
 unusual.eggs.1$perc.odd<-100*unusual.eggs.1$U/unusual.eggs.1$freq
 
+#some quick regressions
+
+#trends in proportion of eggs classified as U
+egg.U.lm<-lm(perc.odd~Year, data=unusual.eggs.1)
+summary(egg.U.lm)
+
+#trends in largest egg collected
+egg.max.lm<-lm(maxegg~Year, data=unusual.eggs.1)
+summary(egg.max.lm)
+
+#trends in smallest egg collected
+egg.min.lm<-lm(minegg~Year, data=unusual.eggs.1)
+summary(egg.min.lm)
 
 unusual.plot<-ggplot(unusual.eggs.1, aes(x=Year))+
-  geom_smooth(aes(y=perc.odd, linetype="percegg.line"), method="lm", se=FALSE, colour="black")+
+  geom_smooth(aes(y=perc.odd, linetype="percegg.line"), method="lm", se=FALSE, colour="grey")+
   geom_point(aes(y=perc.odd, color="percegg", fill="percegg.fill", shape="percegg.shape"), size=4, colour="black") +
   #put the other measures on the secondary axis
   geom_smooth(aes(y=maxegg/1.25, linetype="maxegg.line"), method="lm", se=FALSE, colour="black")+
   geom_point(aes(y=maxegg/1.25, color="maxegg", fill="maxegg.fill", shape="maxegg.shape"), color="black", size=4)+
-  geom_smooth(aes(y=minegg/1.25, linetype="minegg.line"), method="lm", se=FALSE, colour="black")+
+  geom_smooth(aes(y=minegg/1.25, linetype="minegg.line"), method="lm", se=FALSE, colour="grey")+
   geom_point(aes(y=minegg/1.25, color="minegg", fill="minegg.fill", shape="minegg.shape"), color="black", size=4)+
   scale_y_continuous(sec.axis=sec_axis(~.*1.25, name=expression("Egg volume "~cm^3)))+
   scale_colour_manual(name="", values=c(maxegg="black", minegg="black", percegg="black"), labels=c("largest egg", "smallest egg", "% unusual"))+
   scale_linetype_manual(name="", values=c(maxegg.line="dotdash", minegg.line="twodash",percegg.line="dashed"),labels=c("largest egg", "smallest egg", "% unusual"))+
   scale_fill_manual(name="", values=c(maxegg.fill="orange", minegg.fill="blue", percegg.fill="pink"),labels=c("largest egg", "smallest egg", "% unusual"))+
   scale_shape_manual(name="", values=c(maxegg.shape=22, minegg.shape=24, percegg.shape=21),labels=c("largest egg", "smallest egg", "% unusual"))+
+  guides(linetype="none")+
   theme_bw()+
   labs(y="Proportion unclassified eggs ", x="Year")
  
 unusual.plot
+
+#save to pdf
+pdf("figs/unusual.pdf", height=5, width=7)
+unusual.plot
+dev.off()
