@@ -198,5 +198,12 @@ eggvar.plot<-ggplot(crosstab.eggs, aes(A.SE, B.SE,
 eggvar.plot
 
 
-#not much there, so let's leave it alone.
+#not much there, so let's leave it alone. but it brings me to the question- were people more likely to 
+#collect unusual/remarkable eggs in the past?
+library(reshape2)
+
+unusual.summary<-count(penguin, c("Year", "Decision"))
+unusual.summary.crosstab<-dcast(unusual.summary,  Year ~ Decision, value.var = "freq", fun.aggregate = sum)
+
+eggsperyear<-count(penguin, "Year")
 
