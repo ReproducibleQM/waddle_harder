@@ -52,6 +52,7 @@ a <- ggplot(smallerworld) +
 #Islands
 b <- ggplot(TristanGoughSmall) +
   theme_bw() +
+  #theme(panel.background = element_blank())+
   geom_polygon(data = shapefile_df, aes(x = long, y = lat, group = group),colour = 'black', fill = 'black', size = 1)+
   annotate("text", x = -11.8, y = -37.1, label = "Tristan")+
   annotate("text", x = -9.6, y = -40.1, label = "Gough")+
@@ -65,6 +66,8 @@ c <- ggplot(data = sst_df, aes(x = long, y = lat, z = sst))+
   theme_bw()+
   coord_fixed(xlim = c(-14, -8),  ylim = c(-42, -36), ratio = 1)+
   stat_contour(bins = 20,size = 1)+
+  geom_polygon(data = shapefile_df,colour = 'black', fill = 'black', size = 1)+
+  
 
   # annotate("text", x = -11.8, y = -37.1, label = "Tristan")+
   # annotate("text", x = -9.6, y = -40.1, label = "Gough")+
@@ -75,12 +78,13 @@ c1 = direct.label(c, list("bottom.pieces", colour='black'))
              
 grid.newpage()
 
-vpb_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)  # the larger map
+#vpb_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)  # the larger map
 vpc_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)
-vpa_ <- viewport(width = 0.3, height = 0.3, x = 0.65, y = 0.80)  # the inset in upper right
+vpa_ <- viewport(width = 0.3, height = 0.3, x = 0.70, y = 0.80)  # the inset in upper right
 
-print(b, vp = vpb_)
+
 print(c, vp = vpc_)
+#print(b, vp = vpb_)
 print(a, vp = vpa_)
 
 
