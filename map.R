@@ -6,6 +6,8 @@ library("maps")
 library("grid")
 library("gridExtra")
 library("rgdal")
+library("RColorBrewer")
+library("plotly")
 
 shapefile <- readOGR(dsn = ".", "Tristan") 
 shapefile_df <- fortify(shapefile)
@@ -37,15 +39,16 @@ names(sst_df)=c('sst')
 sst_df$lat = t(sstlatlong[1,])
 sst_df$long = t(sstlatlong[2,]-360)
 
+sst_df2 = sst_df[which(sst_df$lat >= -42 & sst_df$lat <= -36 & sst_df$long >= -14 & sst_df$long <= -8),]
 ptheme <- theme(panel.border = element_rect(colour = 'black', size = 2, linetype = 2),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_rect(fill = 'white'),legend.key = element_blank())
 
 
 #Inset
 a <- ggplot(smallerworld) +
   coord_fixed(1)+
-  theme_bw(base_size = 2) +
-  geom_path(data = smallerworld, aes(x, y), colour = "black") +
-  geom_rect(data = insetrect, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), alpha = 0, colour = "blue", size = 1, linetype = 1) +
+  theme_bw(base_size = -1) +
+  geom_path(data = smallerworld, aes(x, y), colour = 'black',fill = 'grey80') +
+  geom_rect(data = insetrect, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), alpha = 0, colour = "red", size = 1, linetype = 1) +
   theme(axis.ticks = element_blank(), axis.text.x = element_blank(),axis.text.y = element_blank()) +
   labs(x = '', y = '')
 
@@ -61,13 +64,21 @@ b <- ggplot(TristanGoughSmall) +
   labs(x = 'lon', y = 'lat')+
   coord_fixed(xlim = c(-14, -8),  ylim = c(-42, -36), ratio = 1)
 
+
 #sst
-c <- ggplot(data = sst_df, aes(x = long, y = lat, z = sst))+
+c <- ggplot(data = sst_df2, aes(x = long, y = lat, fill = sst)) + 
+  geom_raster(interpolate = T) +
+  geom_polygon(data = shapefile_df, aes(x=long, y = lat, group = group), color = 'black', fill = 'grey80') +
+  scale_fill_gradientn(colours = rev(rainbow(7)),na.value = NA) +
   theme_bw()+
   coord_fixed(xlim = c(-14, -8),  ylim = c(-42, -36), ratio = 1)+
-  stat_contour(bins = 20,size = 1)+
-  geom_polygon(data = shapefile_df,colour = 'black', fill = 'black', size = 1)+
+  annotate("text", x = -11.8, y = -37.1, label = "Tristan")+
+  annotate("text", x = -9.6, y = -40.1, label = "Gough")+
+  annotate("text", x = -13.1, y = -37, label = "Inaccessible")+
+  annotate("text", x = -12.1, y = -37.6, label = "Nightingale")+
+  labs(x = 'lon', y = 'lat')+
   
+  scale_color_brewer(palette = "Purples")
 
   # annotate("text", x = -11.8, y = -37.1, label = "Tristan")+
   # annotate("text", x = -9.6, y = -40.1, label = "Gough")+
@@ -78,9 +89,9 @@ c1 = direct.label(c, list("bottom.pieces", colour='black'))
              
 grid.newpage()
 
-#vpb_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)  # the larger map
+vpb_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)  # the larger map
 vpc_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)
-vpa_ <- viewport(width = 0.3, height = 0.3, x = 0.70, y = 0.80)  # the inset in upper right
+vpa_ <- viewport(width = 0.3, height = 0.3, x = 0.60, y = 0.80)  # the inset in upper right
 
 
 print(c, vp = vpc_)
