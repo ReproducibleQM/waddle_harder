@@ -1,5 +1,6 @@
 # SST plots
 # RUN penguinR.R FIRST!!
+#also oil_spill_etc_analysis.R
 
 library(zoo)
 library(ggplot2)
@@ -9,17 +10,67 @@ SST<-read.csv(file="SST_TG.csv", header=T)
 View(SST)
 
 
+SST.means<-ddply(SST, "Year", summarize, 
+                North=mean(Tristan), South=mean(Gough))
 
-#12 month rolling mean
-cma_tristan = rollmean(SST$Tristan,12,na.pad=TRUE)
-cma_gough = rollmean(SST$Gough,12,na.pad=TRUE)
+summary.penguin.year.Zone<-ddply(penguin2, c("Zone", "Decision", "Year"), summarise,
+                            mean.Volume=mean(Volume), N=length(Volume),  SE=sd(Volume)/sqrt(N))
 
+#subset the data so we can manually add it as layers to the graph
+summary.penguin.year.North<-summary.penguin.year.Zone[which(summary.penguin.year.Zone$Zone=="Other"),]
+summary.penguin.year.South<-summary.penguin.year.Zone[which(summary.penguin.year.Zone$Zone=="Gough"),]
+
+summary.penguin.year.North.A<-summary.penguin.year.North[which(summary.penguin.year.North$Decision=="A"),]
+summary.penguin.year.North.B<-summary.penguin.year.North[which(summary.penguin.year.North$Decision=="B"),]
+
+summary.penguin.year.South.A<-summary.penguin.year.South[which(summary.penguin.year.South$Decision=="A"),]
+summary.penguin.year.South.B<-summary.penguin.year.South[which(summary.penguin.year.South$Decision=="B"),]
 #ggplot for timeseries
 
 
-ggplot(data=SST, aes(x=dose, y=len)) +
-  geom_line(linetype = "dashed")+
-  geom_point()
+Northplot<-ggplot(data=SST.means, aes(x=Year, y=North)) +
+  geom_line(linetype = "solid", colour="darkred")+
+  theme_bw()+
+  ylim(c(13,17))+
+  #put the other measures on the secondary axis
+  geom_errorbar(data=summary.penguin.year.North.A, aes(x=Year, y=(mean.Volume/50+13.2), 
+                                                       ymin=(mean.Volume-SE)/50+13.2,
+                                                       ymax=(mean.Volume+SE)/50+13.2), 
+                width=0.05, color="black")+
+  geom_point(data=summary.penguin.year.North.A, aes(x=Year, y=(mean.Volume/50+13.2)),
+             color="black", size=4, fill="blue", pch=24)+
+  geom_errorbar(data=summary.penguin.year.North.B, aes(x=Year, y=(mean.Volume/50+13.2), 
+                                                       ymin=(mean.Volume-SE)/50+13.2,
+                                                       ymax=(mean.Volume+SE)/50+13.2), 
+                width=0.05, color="black")+
+  geom_point(data=summary.penguin.year.North.B, aes(x=Year, y=(mean.Volume/50+13.2)),
+             color="black", size=4, fill="orange", pch=22)+
+  scale_y_continuous(sec.axis=sec_axis(~(.-13.2)*50, name=expression("Mean egg volume, "~cm^3)))+
+    labs(y=expression("Mean annual sea surface temperature, "~degree~C), x="Year")
+Northplot
+
+
+Southplot<-ggplot(data=SST.means, aes(x=Year, y=South)) +
+  geom_line(linetype = "solid", colour="darkblue")+
+  theme_bw()+
+  ylim(c(13,17))+
+  #put the other measures on the secondary axis
+  geom_errorbar(data=summary.penguin.year.South.A, aes(x=Year, y=(mean.Volume/50+13.2), 
+                                                       ymin=(mean.Volume-SE)/50+13.2,
+                                                       ymax=(mean.Volume+SE)/50+13.2), 
+                width=0.05, color="black")+
+  geom_point(data=summary.penguin.year.South.A, aes(x=Year, y=(mean.Volume/50+13.2)),
+             color="black", size=4, fill="blue", pch=24)+
+  geom_errorbar(data=summary.penguin.year.South.B, aes(x=Year, y=(mean.Volume/50+13.2), 
+                                                       ymin=(mean.Volume-SE)/50+13.2,
+                                                       ymax=(mean.Volume+SE)/50+13.2), 
+                width=0.05, color="black")+
+  geom_point(data=summary.penguin.year.South.B, aes(x=Year, y=(mean.Volume/50+13.2)),
+             color="black", size=4, fill="orange", pch=22)+
+  scale_y_continuous(sec.axis=sec_axis(~(.-13.2)*50, name=expression("Mean egg volume, "~cm^3)))+
+  labs(y=expression("Mean annual sea surface temperature, "~degree~C), x="Year")
+Southplot
+
 
 
 # # Base plot with date axis
