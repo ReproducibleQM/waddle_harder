@@ -12,13 +12,17 @@ library("plotly")
 shapefile <- readOGR(dsn = ".", "Tristan") 
 shapefile_df <- fortify(shapefile)
 
+#define coords for the sst points - these are the points used in the study
+sst_points = data.frame("long" = c(-12,-10), "lat" = c(-38,-40))
+
+
 worldmap <- data.frame(map("world", plot = FALSE)[c("x", "y")])
 
 smallerworld <- worldmap[worldmap$x < 30 & worldmap$x > -80 & worldmap$y < 30 & worldmap$y > -60,]
 TristanGoughSmall <- worldmap[worldmap$x < -8 & worldmap$x > -14 & worldmap$y < -36 & worldmap$y > -42, ]
 
 #make little box in the inset map
-insetrect <- data.frame(xmin = -14, xmax = -8, ymin = -42, ymax = -36)
+insetrect <- data.frame(xmin = -13, xmax = -9, ymin = -41, ymax = -37)
 
 #Read in sst csv so that we can find the domain average
 sstdat <- read.csv(file="SST_Data_All.csv", header=F, sep=",")
@@ -61,21 +65,25 @@ b <- ggplot(TristanGoughSmall) +
   annotate("text", x = -9.6, y = -40.1, label = "Gough")+
   annotate("text", x = -13.1, y = -37, label = "Inaccessible")+
   annotate("text", x = -12.1, y = -37.6, label = "Nightingale")+
+  geom_point(data = sst_points, aes(x = long, y = lat))+
   labs(x = 'lon', y = 'lat')+
-  coord_fixed(xlim = c(-14, -8),  ylim = c(-42, -36), ratio = 1)
+  #coord_fixed(xlim = c(-14, -8),  ylim = c(-42, -36), ratio = 1)
 
 
 #sst
 c <- ggplot(data = sst_df2, aes(x = long, y = lat, fill = sst)) + 
   geom_raster(interpolate = T) +
   geom_polygon(data = shapefile_df, aes(x=long, y = lat, group = group), color = 'black', fill = 'grey80') +
-  scale_fill_gradientn(colours = rev(rainbow(7)),na.value = NA) +
+  scale_fill_gradientn(colours = (topo.colors(20)),na.value = NA) +
   theme_bw()+
-  coord_fixed(xlim = c(-14, -8),  ylim = c(-42, -36), ratio = 1)+
+  coord_fixed(xlim = c(-13, -9),  ylim = c(-41, -37), ratio = 1)+
   annotate("text", x = -11.8, y = -37.1, label = "Tristan")+
   annotate("text", x = -9.6, y = -40.1, label = "Gough")+
   annotate("text", x = -13.1, y = -37, label = "Inaccessible")+
   annotate("text", x = -12.1, y = -37.6, label = "Nightingale")+
+  annotate("point", x = -12, y = -38,colour = "red", size = 2)+
+  annotate("point", x = -10, y = -40,colour = "red", size = 2)+
+
   labs(x = 'lon', y = 'lat')+
   
   scale_color_brewer(palette = "Purples")
@@ -89,7 +97,7 @@ c1 = direct.label(c, list("bottom.pieces", colour='black'))
              
 grid.newpage()
 
-vpb_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)  # the larger map
+#vpb_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)  # the larger map
 vpc_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)
 vpa_ <- viewport(width = 0.3, height = 0.3, x = 0.60, y = 0.80)  # the inset in upper right
 
