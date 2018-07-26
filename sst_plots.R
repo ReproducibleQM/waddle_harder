@@ -90,3 +90,9 @@ grid.arrange(arrangeGrob(Northplot1, Southplot1, heights=c(1,1)),
              right=textGrob(expression("Mean egg volume, "~cm^3), rot=270, hjust=1.7),
              sub=textGrob("Year", vjust=-13))
 
+pdf("figs/SST_timeseries_with_eggs.pdf", height=8, width=8)
+grid.arrange(arrangeGrob(Northplot1, Southplot1, heights=c(1,1)),
+             left=textGrob(expression("Mean annual sea surface temperature, "~degree~C), rot=90, hjust=-0.15),
+             right=textGrob(expression("Mean egg volume, "~cm^3), rot=270, hjust=1.7),
+             sub=textGrob("Year", vjust=-13))
+dev.off()
