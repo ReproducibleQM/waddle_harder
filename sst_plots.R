@@ -4,6 +4,7 @@
 
 library(zoo)
 library(ggplot2)
+library(plyr)
 
 # loading the data
 SST<-read.csv(file="SST_TG.csv", header=T)
@@ -46,7 +47,7 @@ Northplot<-ggplot(data=SST.means, aes(x=Year, y=North)) +
              color="black", size=4, fill="orange", pch=22)+
   scale_y_continuous(limits=c(11.7,16), sec.axis=sec_axis(~(.-11.7)*31, name=NULL))+
     labs(y=expression("Mean annual sea surface temperature, "~degree~C), x="Year")+
-  annotate("text", x=1850, y=15.7, label="A", size=6)
+  annotate("text", x=1850, y=15.7, label="North", size=5)
 Northplot
 
 
@@ -68,7 +69,7 @@ Southplot<-ggplot(data=SST.means, aes(x=Year, y=South)) +
              color="black", size=4, fill="orange", pch=22)+
   scale_y_continuous(limits=c(11.7,16), sec.axis=sec_axis(~(.-11.7)*31, name=NULL))+
   labs(y=expression("Mean annual sea surface temperature, "~degree~C), x="Year")+
-  annotate("text", x=1850, y=15.7, label="B", size=6)
+  annotate("text", x=1850, y=15.7, label="South", size=5)
 Southplot
 
 
