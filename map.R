@@ -71,31 +71,31 @@ b <- ggplot(TristanGoughSmall) +
 
 
 #sst
-c <- ggplot(data = sst_df2, aes(x = long, y = lat, fill = sst)) + 
-  geom_raster(interpolate = T) +
-  geom_polygon(data = shapefile_df, aes(x=long, y = lat, group = group), color = 'black', fill = 'grey80') +
+c <- ggplot(data = sst_df2, aes(x = long, y = lat, fill = sst))+ 
+  geom_raster(interpolate = T)+
+  geom_polygon(data = shapefile_df, aes(x=long, y = lat, group = group), color = 'black', fill = 'grey80')+
   scale_fill_gradientn(colours = (topo.colors(20)),na.value = NA) +
   theme_bw()+
   coord_fixed(xlim = c(-13, -9),  ylim = c(-41, -37), ratio = 1)+
-  annotate("text", x = -11.8, y = -37.1, label = "Tristan")+
-  annotate("text", x = -9.6, y = -40.1, label = "Gough")+
-  annotate("text", x = -13.1, y = -37, label = "Inaccessible")+
-  annotate("text", x = -12.1, y = -37.6, label = "Nightingale")+
+  annotate("text", x = -11.9, y = -37.1, label = "Tristan", size = 3.6)+
+  annotate("text", x = -9.6, y = -40.3, label = "Gough",size = 3.6)+
+  annotate("text", x = -12.5, y = -38.1, label = "Inaccessible",size = 3.6)+
+  annotate("segment", x = -12.68, xend = -12.68, y = -38, yend = -37.4, colour = "black",size = .5)+
+  annotate("text", x = -12, y = -37.4,label = "Nightingale", size = 3.6)+
+  
   annotate("point", x = -12, y = -38,colour = "red", size = 2)+
   annotate("point", x = -10, y = -40,colour = "red", size = 2)+
-
-  labs(x = 'lon', y = 'lat')+
+  annotate("text", x = -11.35, y = -38,label = "north grid point", colour = "red")+
+  annotate("text", x = -9.35, y = -40,label = "south grid point", colour = "red")+
   
-  scale_color_brewer(palette = "Purples")
 
-  # annotate("text", x = -11.8, y = -37.1, label = "Tristan")+
-  # annotate("text", x = -9.6, y = -40.1, label = "Gough")+
-  # annotate("text", x = -13.1, y = -37, label = "Inaccessible")+
-  # annotate("text", x = -12.1, y = -37.6, label = "Nightingale")
+  #labs(x = 'lon', y = 'lat')
+  
+  #scale_color_brewer(palette = "Purples")
 
-c1 = direct.label(c, list("bottom.pieces", colour='black'))
+#c1 = direct.label(c, list("bottom.pieces", colour='black'))
              
-grid.newpage()
+#grid.newpage()
 
 #vpb_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)  # the larger map
 vpc_ <- viewport(width = 1, height = 1, x = 0.5, y = 0.5)
@@ -107,14 +107,4 @@ print(c, vp = vpc_)
 print(a, vp = vpa_)
 
 
-
-####troubloushoot
-# 
-# ggplot(data = sst_df, aes(x = long, y = lat, z = sst))+
-#   #stat_contour(geom = 'path',aes(fill=..level..))+
-#   #geom_tile(aes(fill=sst))+
-#   #geom_raster(interpolate = TRUE)+
-#   #scale_fill_gradientn(colours=rev(rainbow(7)))
-#   stat_contour(aes(colour = ..level..))
-#   
 
