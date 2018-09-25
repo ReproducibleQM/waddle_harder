@@ -7,7 +7,7 @@ library(ggplot2)
 library(plyr)
 
 # loading the data
-SST<-read.csv(file="SST_TG.csv", header=T)
+SST<-read.csv(file="data/SST_TG.csv", header=T)
 View(SST)
 
 

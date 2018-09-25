@@ -25,8 +25,8 @@ TristanGoughSmall <- worldmap[worldmap$x < -8 & worldmap$x > -14 & worldmap$y < 
 insetrect <- data.frame(xmin = -13, xmax = -9, ymin = -41, ymax = -37)
 
 #Read in sst csv so that we can find the domain average
-sstdat <- read.csv(file="SST_Data_All.csv", header=F, sep=",")
-sstlatlong <- read.csv(file="SST_Lat_Longs.csv", header=F, sep=",")
+sstdat <- read.csv(file="data/SST_Data_All.csv", header=F, sep=",")
+sstlatlong <- read.csv(file="data/SST_Lat_Longs.csv", header=F, sep=",")
 
 #Calculate the gridpoint averages, then reshape the data so that the contours can be plotted easily
 avgs = colMeans(sstdat, na.rm = T, dims = 1)
