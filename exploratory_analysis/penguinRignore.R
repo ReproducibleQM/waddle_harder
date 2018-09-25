@@ -9,7 +9,7 @@ library("nlme")
 library("ggplot2")
 
 #loading the data
-penguin.data<-read.csv("penguin.csv")
+penguin.data<-read.csv("data/penguin.csv")
 names(penguin.data)
 dim(penguin.data)
 View(penguin.data)
