@@ -17,7 +17,7 @@ library(vegan)
 
 
 #loading the data
-penguin.data<-read.csv("penguin.csv")
+penguin.data<-read.csv("data/penguin.csv")
 names(penguin.data)
 dim(penguin.data)
 View(penguin.data)
@@ -61,7 +61,7 @@ penguin.south.B=penguin.data[penguin.B$Zone=="Gough",]
 
 
 #bring in the SST data
-SST<-read.csv(file="SST_TG.csv", header=T)
+SST<-read.csv(file="data/SST_TG.csv", header=T)
 
 melted_sst<-melt(SST, id=c("Year", "Month"))
 # create an object with the SSTs
