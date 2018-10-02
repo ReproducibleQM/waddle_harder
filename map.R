@@ -106,13 +106,14 @@
 # #print(b, vp = vpb_)
 # print(a, vp = vpa_)
 
+library(sf)
 library(rgdal)     # R wrapper around GDAL/OGR
 library(ggplot2)   # for general plotting
-library(ggmaps)    # for fortifying shapefiles
+library(ggmap)    # for fortifying shapefiles
 
 # First read in the shapefile, using the path to the shapefile and the shapefile name minus the
 # extension as arguments
-shapefile <- readOGR('home/waddle_harder/shapefile', "Tristan")
+shapefile <- readOGR(dsn = 'C:/Users/ryana/Documents/waddle_harder/shapefile', layer = "Tristan")
 
 # Next the shapefile has to be converted to a dataframe for use in ggplot2
 shapefile_df <- fortify(shapefile)
