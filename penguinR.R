@@ -3,7 +3,7 @@
 #created new variables: Location2 =gough and alex islands are merged. changed the name alex to gough
 #                     : Zone =gough island separated from all other islands.
 
-remove('Final_North', 'Final_South')
+
 #needed packages
 library(nlme)
 library(ggplot2)
@@ -20,7 +20,6 @@ library(vegan)
 penguin.data<-read.csv("data/penguin.csv")
 names(penguin.data)
 dim(penguin.data)
-View(penguin.data)
 summary(penguin.data)
 
 #to get rid of na
@@ -76,11 +75,6 @@ names(sst_residual)<-c("Year", "Month", "Zone", "SST_Residual")
 #harmonize variable names
 sst_residual$Zone<-gsub("_Residual", "", sst_residual$Zone)
 
-#Merge the SST data with the penguin data
-#all_data<-merge(penguin.data, sst_working, by=c("Year", "Zone")
-
-# write new penguin data table to csv
-write.csv(penguin.data, "penguin.data.csv") 
 
 
 # merge the data
@@ -244,7 +238,7 @@ Modnames <- c("Month_1", "avg2", "avg3", "avg4", "min", "max","avg5_1","avg5_2",
 summary(LM[[3]])
 anova(LM[[3]])
 
-# we have weak eveidence for a differnt trend between the two zones, so let's look at them separately
+# we have weak evidence for a differnt trend between the two zones, so let's look at them separately
 
 Final_All_Residual_North<-Final_All_Residual[which(Final_All_Residual$Zone=="North"),] 
 Final_All_Residual_South<-Final_All_Residual[which(Final_All_Residual$Zone!="North"),] 
@@ -252,4 +246,8 @@ Final_All_Residual_South<-Final_All_Residual[which(Final_All_Residual$Zone!="Nor
 North_SST_model = lm(Volume~Decision+avg3,data=Final_All_Residual_North)
 summary(North_SST_model)
 anova(North_SST_model)
+
+South_SST_model = lm(Volume~Decision+avg3,data=Final_All_Residual_South)
+summary(South_SST_model)
+anova(South_SST_model)
 
