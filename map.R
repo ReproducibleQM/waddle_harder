@@ -121,9 +121,11 @@ shapefile_df <- fortify(shapefile)
 # Now the shapefile can be plotted as either a geom_path or a geom_polygon.
 # Paths handle clipping better. Polygons can be filled.
 # You need the aesthetics long, lat, and group.
-map <-ggplot(data = shapefile_df, aes(x = long, y = lat, group=group)) +
-  geom_polygon(color = 'black', fill = 'gray', size = .2)+
-  #stat_contour(data = sst_df, aes(long,lat, z = sst))+
+map <-ggplot() +
+  geom_polygon(data = shapefile_df, aes(x = long, y = lat, group=group), 
+               color = 'black', fill = 'gray', size = .2)+
+  theme_bw()+
+  stat_contour(data = sst_df, aes(long,lat, z = sst))+
   coord_fixed(xlim = c(-13, -9),  ylim = c(-41, -37), ratio = 1)+
   annotate("text", x = -11.9, y = -37.1, label = "Tristan", size = 3.6)+
   annotate("text", x = -9.6, y = -40.3, label = "Gough",size = 3.6)+
