@@ -24,24 +24,24 @@
 # #make little box in the inset map
 # insetrect <- data.frame(xmin = -13, xmax = -9, ymin = -41, ymax = -37)
 # 
-# #Read in sst csv so that we can find the domain average
-# sstdat <- read.csv(file="data/SST_Data_All.csv", header=F, sep=",")
-# sstlatlong <- read.csv(file="data/SST_Lat_Longs.csv", header=F, sep=",")
-# 
-# #Calculate the gridpoint averages, then reshape the data so that the contours can be plotted easily
-# avgs = colMeans(sstdat, na.rm = T, dims = 1)
-# meansst_grid = matrix(avgs,nrow=8,byrow = T)
-# meansst_grid_smaller = meansst_grid[3:5,3:6]
-# newlat = as.data.frame(seq(from = -40, to = -36, by = 2))
-# newlong = as.data.frame(seq(from = -14, to = -8, by = 2))
-# dat = as.data.frame(meansst_grid_smaller)
-# 
-# #Make data frame for sst because apparently contours can only be made from dataframes
-# 
-# sst_df = as.data.frame(avgs)
-# names(sst_df)=c('sst')
-# sst_df$lat = t(sstlatlong[1,])
-# sst_df$long = t(sstlatlong[2,]-360)
+#Read in sst csv so that we can find the domain average
+sstdat <- read.csv(file="data/SST_Data_All.csv", header=F, sep=",")
+sstlatlong <- read.csv(file="data/SST_Lat_Longs.csv", header=F, sep=",")
+
+#Calculate the gridpoint averages, then reshape the data so that the contours can be plotted easily
+avgs = colMeans(sstdat, na.rm = T, dims = 1)
+meansst_grid = matrix(avgs,nrow=8,byrow = T)
+meansst_grid_smaller = meansst_grid[3:5,3:6]
+newlat = as.data.frame(seq(from = -40, to = -36, by = 2))
+newlong = as.data.frame(seq(from = -14, to = -8, by = 2))
+dat = as.data.frame(meansst_grid_smaller)
+
+#Make data frame for sst because apparently contours can only be made from dataframes
+
+sst_df = as.data.frame(avgs)
+names(sst_df)=c('sst')
+sst_df$lat = t(sstlatlong[1,])
+sst_df$long = t(sstlatlong[2,]-360)
 # 
 # sst_df2 = sst_df[which(sst_df$lat >= -42 & sst_df$lat <= -36 & sst_df$long >= -14 & sst_df$long <= -8),]
 # ptheme <- theme(panel.border = element_rect(colour = 'black', size = 2, linetype = 2),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_rect(fill = 'white'),legend.key = element_blank())
@@ -121,9 +121,9 @@ shapefile_df <- fortify(shapefile)
 # Now the shapefile can be plotted as either a geom_path or a geom_polygon.
 # Paths handle clipping better. Polygons can be filled.
 # You need the aesthetics long, lat, and group.
-map <-ggplot(data = shapefile_df, aes(x = long, y = lat, group = group)) +
+map <-ggplot(data = shapefile_df, aes(x = long, y = lat, group=group)) +
   geom_polygon(color = 'black', fill = 'gray', size = .2)+
-  stat_contour(aes(long,lat,z = sst),data = sst_df)+
+  #stat_contour(data = sst_df, aes(long,lat, z = sst))+
   coord_fixed(xlim = c(-13, -9),  ylim = c(-41, -37), ratio = 1)+
   annotate("text", x = -11.9, y = -37.1, label = "Tristan", size = 3.6)+
   annotate("text", x = -9.6, y = -40.3, label = "Gough",size = 3.6)+
