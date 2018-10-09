@@ -122,7 +122,20 @@ shapefile_df <- fortify(shapefile)
 # Paths handle clipping better. Polygons can be filled.
 # You need the aesthetics long, lat, and group.
 map <-ggplot(data = shapefile_df, aes(x = long, y = lat, group = group)) +
-  geom_polygon(color = 'black', fill = 'gray', size = .2)
+  geom_polygon(color = 'black', fill = 'gray', size = .2)+
+  stat_contour(aes(long,lat,z = sst),data = sst_df)+
+  coord_fixed(xlim = c(-13, -9),  ylim = c(-41, -37), ratio = 1)+
+  annotate("text", x = -11.9, y = -37.1, label = "Tristan", size = 3.6)+
+  annotate("text", x = -9.6, y = -40.3, label = "Gough",size = 3.6)+
+  annotate("text", x = -12.5, y = -38.1, label = "Inaccessible",size = 3.6)+
+  annotate("segment", x = -12.68, xend = -12.68, y = -38, yend = -37.4, colour = "black",size = .5)+
+  annotate("text", x = -12, y = -37.4,label = "Nightingale", size = 3.6)+
+  #
+  annotate("point", x = -12, y = -38,colour = "red", size = 2)+
+  annotate("point", x = -10, y = -40,colour = "red", size = 2)+
+  annotate("text", x = -11.35, y = -38,label = "north grid point", colour = "red")+
+  annotate("text", x = -9.35, y = -40,label = "south grid point", colour = "red")
+
 
 map + theme_nothing()
 
