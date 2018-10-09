@@ -113,7 +113,7 @@ library(ggmap)    # for fortifying shapefiles
 
 # First read in the shapefile, using the path to the shapefile and the shapefile name minus the
 # extension as arguments
-shapefile <- readOGR(dsn = 'C:/Users/ryana/Documents/waddle_harder/shapefile', layer = "Tristan")
+shapefile <- readOGR(dsn = './shapefile', layer = "Tristan")
 
 # Next the shapefile has to be converted to a dataframe for use in ggplot2
 shapefile_df <- fortify(shapefile)
