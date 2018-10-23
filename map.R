@@ -43,7 +43,7 @@ names(sst_df)=c('sst')
 sst_df$lat = t(sstlatlong[1,])
 sst_df$long = t(sstlatlong[2,]-360)
 # 
-# sst_df2 = sst_df[which(sst_df$lat >= -42 & sst_df$lat <= -36 & sst_df$long >= -14 & sst_df$long <= -8),]
+sst_df2 = sst_df[which(sst_df$lat >= -42 & sst_df$lat <= -36 & sst_df$long >= -14 & sst_df$long <= -8),]
 # ptheme <- theme(panel.border = element_rect(colour = 'black', size = 2, linetype = 2),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_rect(fill = 'white'),legend.key = element_blank())
 # 
 # 
@@ -122,15 +122,24 @@ shapefile_df <- fortify(shapefile)
 # Paths handle clipping better. Polygons can be filled.
 # You need the aesthetics long, lat, and group.
 map <-ggplot() +
-  geom_polygon(data = shapefile_df, aes(x = long, y = lat, group=group), 
-               color = 'black', fill = 'gray', size = .2)+
+  
+  #ggplot(sst_df2,aes(long,lat,fill=sst))+
+  geom_raster(data = sst_df2, aes(long,lat,fill = sst),interpolate = T)+  
+  #geom_polygon(data = sst_df2, aes(x=long, y = lat,fill=sst))+
+  
+  #geom_raster(interpolate = T)
+  
+  scale_fill_gradientn(colours = (topo.colors(20)),na.value = NA) +
+  
+  
+  geom_polygon(data = shapefile_df, aes(x = long, y = lat, group=group),color = 'black', fill = 'gray', size = .2)+
   theme_bw()+
-  stat_contour(data = sst_df, aes(long,lat, z = sst))+
-  coord_fixed(xlim = c(-13, -9),  ylim = c(-41, -37), ratio = 1)+
+  stat_contour(data = sst_df2, geom="path", aes(long,lat, z = sst), binwidth= 1)+
+    coord_fixed(xlim = c(-13, -9),  ylim = c(-41, -37), ratio = 1)+
   annotate("text", x = -11.9, y = -37.1, label = "Tristan", size = 3.6)+
   annotate("text", x = -9.6, y = -40.3, label = "Gough",size = 3.6)+
   annotate("text", x = -12.5, y = -38.1, label = "Inaccessible",size = 3.6)+
-  annotate("segment", x = -12.68, xend = -12.68, y = -38, yend = -37.4, colour = "black",size = .5)+
+  annotate("segment", x = -12.68, xend = -12.68, y = -38, yend = -37.4, colour = "black",size = .1)+
   annotate("text", x = -12, y = -37.4,label = "Nightingale", size = 3.6)+
   #
   annotate("point", x = -12, y = -38,colour = "red", size = 2)+
@@ -139,9 +148,6 @@ map <-ggplot() +
   annotate("text", x = -9.35, y = -40,label = "south grid point", colour = "red")
 
 
-map + theme_nothing()
-
-print(map) 
 
 # Using the ggplot2 function coord_map will make things look better and it will also let you change
 # the projection. But sometimes with large shapefiles it makes everything blow up.
